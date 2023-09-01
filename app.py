@@ -11,7 +11,7 @@ app.config["JSON_SORT_KEYS"] = False
 con ={
     'user':'root',
     'password':'password',
-    'host':'127.0.0.1',
+    'host':'localhost',
     'database':'stage2',
 }
 # 建立連接池
