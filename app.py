@@ -145,5 +145,5 @@ def index():
 # @app.route("/thankyou")
 # def thankyou():
 # 	return render_template("thankyou.html")
-
+print("test")
 app.run(debug=True, host="0.0.0.0", port=3000)
