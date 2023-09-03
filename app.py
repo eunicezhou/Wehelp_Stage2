@@ -6,6 +6,7 @@ app=Flask(__name__)
 
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
+	print(response)
 	return response
 # app.config["JSON_AS_ASCII"]=False
 # app.config["TEMPLATES_AUTO_RELOAD"]=True
@@ -42,19 +43,22 @@ def connect(execute_str,execute_argument=None):
 def attraction():
 	page = request.args.get("page")
 	keyword = request.args.get("keyword")
-	print(keyword)
+	# print(keyword)
 	if page == None:
 		results_dict = {"error":True,"message":"請輸入page"}
-		return jsonify(results_dict),500
+		finalresult = results_convert(results_dict)
+		return finalresult,500
 	elif int(page)>4:
 		results_dict = {"error":True,"message":"輸入的page超過資料範圍"}
-		return jsonify(results_dict),500
+		finalresult = results_convert(results_dict)
+		return finalresult,500
 	else:
 		try:
 			page = int(page)
 		except ValueError:
 			results_dict = {"error": True, "message": "page格式為數字"}
-			return jsonify(results_dict), 500
+			finalresult = results_convert(results_dict)
+			return finalresult,500
 	execute_argument = page*12
 	if keyword == None:
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
@@ -65,7 +69,7 @@ def attraction():
 			WHERE attraction LIKE %s OR transportation LIKE %s OR address LIKE %s LIMIT 12 OFFSET %s"
 		keyword_str = f'%{keyword}%'
 		page_data = connect(query,(keyword_str,keyword_str,keyword_str,execute_argument))
-	print(page_data)
+	# print(page_data)
 	results = []
 	for item in page_data:
 		id = item[0]
@@ -87,21 +91,24 @@ def attraction():
 		results.append(result)
 		results_dict = {"nextPage":page+1,"data":results}
 		finalresult = results_convert(results_dict)
+	# return finalresult
 	return finalresult
 
 @app.route("/api/attractions/<int:attractionID>")
 def get_attraction(attractionID):
-	if attractionID != int:
+	if type(attractionID) != int:
 		results_dict = {"error":True,"message":"請輸入正確的id數值"}
-		return jsonify(results_dict),400
+		finalresult = results_convert(results_dict)
+		return finalresult,400
 	elif attractionID == None:
 		results_dict = {"error":True,"message":"請一個數值"}
-		return jsonify(results_dict),500
+		finalresult = results_convert(results_dict)
+		return finalresult,500
 	else:
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
 			WHERE id = %s"
 		page_data = connect(query,(attractionID,))
-		print(page_data)
+		# print(page_data)
 		results = []
 		for item in page_data:
 			id = item[0]
@@ -148,5 +155,5 @@ def index():
 # @app.route("/thankyou")
 # def thankyou():
 # 	return render_template("thankyou.html")
-print("test")
+# print("test")
 app.run(debug=True, host="0.0.0.0", port=3000)
