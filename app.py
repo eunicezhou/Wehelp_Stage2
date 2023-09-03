@@ -82,7 +82,7 @@ def attraction():
 					"category": category,"description": introduction,"address": address,
 					"transport": transportation,"mrt": mrt,"lat": 25.04181,"lng": 121.544814,"image":new_img_list}
 		results.append(result)
-		results_dict = {"nextPage":page,"data":results}
+		results_dict = {"nextPage":page+1,"data":results}
 		finalresult = results_convert(results_dict)
 	return finalresult
 
