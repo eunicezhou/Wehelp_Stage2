@@ -6,6 +6,7 @@ app=Flask(__name__)
 
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
+	print(response)
 	return response
 # app.config["JSON_AS_ASCII"]=False
 # app.config["TEMPLATES_AUTO_RELOAD"]=True
@@ -42,27 +43,35 @@ def connect(execute_str,execute_argument=None):
 def attraction():
 	page = request.args.get("page")
 	keyword = request.args.get("keyword")
-	print(keyword)
+	# print(keyword)
 	if page == None:
 		results_dict = {"error":True,"message":"請輸入page"}
-		return jsonify(results_dict),500
+		finalresult = results_convert(results_dict)
+		return finalresult,500
+	elif int(page)>4:
+		results_dict = {"error":True,"message":"輸入的page超過資料範圍"}
+		finalresult = results_convert(results_dict)
+		return finalresult,500
 	else:
 		try:
 			page = int(page)
 		except ValueError:
 			results_dict = {"error": True, "message": "page格式為數字"}
-			return jsonify(results_dict), 500
+			finalresult = results_convert(results_dict)
+			return finalresult,500
 	execute_argument = page*12
 	if keyword == None:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 		LIMIT 12 OFFSET %s"
 		page_data = connect(query,(execute_argument,))
 	else:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
-			WHERE attraction LIKE %s OR transportation LIKE %s OR address LIKE %s LIMIT 12 OFFSET %s"
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt \
+				FROM attraction left JOIN mrt \
+				ON attraction.mrt_id = mrt.mrtID \
+				WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 12 OFFSET %s"
 		keyword_str = f'%{keyword}%'
-		page_data = connect(query,(keyword_str,keyword_str,keyword_str,execute_argument))
-	print(page_data)
+		page_data = connect(query,(keyword_str,keyword_str,execute_argument))
+	# print(page_data)
 	results = []
 	for item in page_data:
 		id = item[0]
@@ -74,28 +83,33 @@ def attraction():
 		introduction = item[4]
 		transportation = item[5]
 		address = item[6]
+		lat = item[7]
+		lng = item[8]
 		img_list = connect("SELECT image FROM img WHERE attraction_id = %s",[id])
 		new_img_list = []
 		for img in img_list:
 			new_img_list.append(img[0])
 		result = {"id":id,"name":attraction,
 					"category": category,"description": introduction,"address": address,
-					"transport": transportation,"mrt": mrt,"lat": 25.04181,"lng": 121.544814,"image":new_img_list}
+					"transport": transportation,"mrt": mrt,"lat":lat ,"lng":lng,"image":new_img_list}
 		results.append(result)
-		results_dict = {"nextPage":page,"data":results}
+		results_dict = {"nextPage":page+1,"data":results}
 		finalresult = results_convert(results_dict)
+	# return finalresult
 	return finalresult
 
 @app.route("/api/attractions/<int:attractionID>")
 def get_attraction(attractionID):
-	if attractionID != int:
+	if type(attractionID) != int:
 		results_dict = {"error":True,"message":"請輸入正確的id數值"}
-		return jsonify(results_dict),400
+		finalresult = results_convert(results_dict)
+		return finalresult,400
 	elif attractionID == None:
 		results_dict = {"error":True,"message":"請一個數值"}
-		return jsonify(results_dict),500
+		finalresult = results_convert(results_dict)
+		return finalresult,500
 	else:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 			WHERE id = %s"
 		page_data = connect(query,(attractionID,))
 		print(page_data)
@@ -110,13 +124,15 @@ def get_attraction(attractionID):
 			introduction = item[4]
 			transportation = item[5]
 			address = item[6]
+			lat = item[7]
+			lng = item[8]
 			img_list = connect("SELECT image FROM img WHERE attraction_id = %s",[id])
 			new_img_list = []
 			for img in img_list:
 				new_img_list.append(img[0])
 			result = {"id":id,"name":attraction,
 						"category": category,"description": introduction,"address": address,
-						"transport": transportation,"mrt": mrt,"lat": 25.04181,"lng": 121.544814,"image":new_img_list}
+						"transport": transportation,"mrt": mrt,"lat":lat ,"lng":lng,"image":new_img_list}
 			results.append(result)
 			results_dict = {"data":results}
 			finalresult = results_convert(results_dict)
@@ -145,5 +161,5 @@ def index():
 # @app.route("/thankyou")
 # def thankyou():
 # 	return render_template("thankyou.html")
-print("test")
+# print("test")
 app.run(debug=True, host="0.0.0.0", port=3000)
