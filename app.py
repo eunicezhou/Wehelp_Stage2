@@ -46,6 +46,9 @@ def attraction():
 	if page == None:
 		results_dict = {"error":True,"message":"請輸入page"}
 		return jsonify(results_dict),500
+	elif int(page)>4:
+		results_dict = {"error":True,"message":"輸入的page超過資料範圍"}
+		return jsonify(results_dict),500
 	else:
 		try:
 			page = int(page)
