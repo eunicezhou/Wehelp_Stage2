@@ -109,10 +109,10 @@ def get_attraction(attractionID):
 		finalresult = results_convert(results_dict)
 		return finalresult,500
 	else:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 			WHERE id = %s"
 		page_data = connect(query,(attractionID,))
-		# print(page_data)
+		print(page_data)
 		results = []
 		for item in page_data:
 			id = item[0]
@@ -124,13 +124,15 @@ def get_attraction(attractionID):
 			introduction = item[4]
 			transportation = item[5]
 			address = item[6]
+			lat = item[7]
+			lng = item[8]
 			img_list = connect("SELECT image FROM img WHERE attraction_id = %s",[id])
 			new_img_list = []
 			for img in img_list:
 				new_img_list.append(img[0])
 			result = {"id":id,"name":attraction,
 						"category": category,"description": introduction,"address": address,
-						"transport": transportation,"mrt": mrt,"lat": 25.04181,"lng": 121.544814,"image":new_img_list}
+						"transport": transportation,"mrt": mrt,"lat":lat ,"lng":lng,"image":new_img_list}
 			results.append(result)
 			results_dict = {"data":results}
 			finalresult = results_convert(results_dict)
