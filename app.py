@@ -61,14 +61,16 @@ def attraction():
 			return finalresult,500
 	execute_argument = page*12
 	if keyword == None:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 		LIMIT 12 OFFSET %s"
 		page_data = connect(query,(execute_argument,))
 	else:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address FROM attraction \
-			WHERE attraction LIKE %s OR transportation LIKE %s OR address LIKE %s LIMIT 12 OFFSET %s"
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt \
+				FROM attraction left JOIN mrt \
+				ON attraction.mrt_id = mrt.mrtID \
+				WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 12 OFFSET %s"
 		keyword_str = f'%{keyword}%'
-		page_data = connect(query,(keyword_str,keyword_str,keyword_str,execute_argument))
+		page_data = connect(query,(keyword_str,keyword_str,execute_argument))
 	# print(page_data)
 	results = []
 	for item in page_data:
@@ -81,13 +83,15 @@ def attraction():
 		introduction = item[4]
 		transportation = item[5]
 		address = item[6]
+		lat = item[7]
+		lng = item[8]
 		img_list = connect("SELECT image FROM img WHERE attraction_id = %s",[id])
 		new_img_list = []
 		for img in img_list:
 			new_img_list.append(img[0])
 		result = {"id":id,"name":attraction,
 					"category": category,"description": introduction,"address": address,
-					"transport": transportation,"mrt": mrt,"lat": 25.04181,"lng": 121.544814,"image":new_img_list}
+					"transport": transportation,"mrt": mrt,"lat":lat ,"lng":lng,"image":new_img_list}
 		results.append(result)
 		results_dict = {"nextPage":page+1,"data":results}
 		finalresult = results_convert(results_dict)
