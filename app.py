@@ -1,6 +1,7 @@
 from flask import *
 import mysql.connector
 from mysql.connector import pooling
+from flask_cors import CORS
 import json
 app=Flask(__name__)
 
@@ -39,6 +40,7 @@ def connect(execute_str,execute_argument=None):
 	return result
 #==================================================================================
 #================api===============================================================
+CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
 @app.route("/api/attractions")
 def attraction():
 	page = request.args.get("page")
