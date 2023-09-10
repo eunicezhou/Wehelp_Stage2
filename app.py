@@ -7,7 +7,6 @@ app=Flask(__name__)
 
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
-	print(response)
 	return response
 # app.config["JSON_AS_ASCII"]=False
 # app.config["TEMPLATES_AUTO_RELOAD"]=True
@@ -30,7 +29,6 @@ def connect(execute_str,execute_argument=None):
 		cursor.execute("USE stage2")
 		cursor.execute(execute_str,execute_argument)
 		result = cursor.fetchall()
-		print("已連接456512154656232")
 	except:
 		print("出現錯誤訊息")
 		result = None
@@ -40,7 +38,7 @@ def connect(execute_str,execute_argument=None):
 	return result
 #==================================================================================
 #================api===============================================================
-CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 @app.route("/api/attractions")
 def attraction():
 	page = request.args.get("page")
@@ -48,10 +46,6 @@ def attraction():
 	# print(keyword)
 	if page == None:
 		results_dict = {"error":True,"message":"請輸入page"}
-		finalresult = results_convert(results_dict)
-		return finalresult,500
-	elif int(page)>4:
-		results_dict = {"error":True,"message":"輸入的page超過資料範圍"}
 		finalresult = results_convert(results_dict)
 		return finalresult,500
 	else:
@@ -63,23 +57,44 @@ def attraction():
 			return finalresult,500
 	execute_argument = page*12
 	if keyword == None:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
-		LIMIT 12 OFFSET %s"
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng \
+			FROM attraction WHERE mrt_id IS NULL OR mrt_id IS NOT NULL\
+			LIMIT 12 OFFSET %s"
+		print(query)
+		nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
+		WHERE mrt_id IS NULL OR mrt_id IS NOT NULL LIMIT 1 OFFSET %s"
 		page_data = connect(query,(execute_argument,))
+		nextPage_data = connect(nextPage,(execute_argument+12,))
+		if nextPage_data == []:
+			nextPageValue = None
+		else:
+			nextPageValue = page + 1
 	else:
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt \
 				FROM attraction left JOIN mrt \
 				ON attraction.mrt_id = mrt.mrtID \
 				WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 12 OFFSET %s"
+		nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt \
+				FROM attraction left JOIN mrt \
+				ON attraction.mrt_id = mrt.mrtID \
+				WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 1 OFFSET %s"
 		keyword_str = f'%{keyword}%'
 		page_data = connect(query,(keyword_str,keyword_str,execute_argument))
+		nextPage_data = connect(nextPage,(keyword_str,keyword_str,execute_argument+12,))
+		if nextPage_data == []:
+			nextPageValue = None
+		else:
+			nextPageValue = page + 1
 	# print(page_data)
 	results = []
 	for item in page_data:
 		id = item[0]
 		attraction = item[1] # 顯示結果為 各風景區名稱(每次回圈只跑出一個結果)
-		mrt_table = connect("SELECT mrt FROM mrt WHERE mrtID = %s",(item[2],))
-		mrt = mrt_table[0][0] # 顯示結果為 各風景區所在的捷運站名稱(每次回圈只跑出一個結果)
+		if item[2] != None:
+			mrt_table = connect("SELECT mrt FROM mrt WHERE mrtID = %s",(item[2],))
+			mrt = mrt_table[0][0] # 顯示結果為 各風景區所在的捷運站名稱(每次回圈只跑出一個結果)
+		else:
+			mrt = "無鄰近捷運站"
 		category_table = connect("SELECT category FROM category WHERE categoryID = %s",(item[3],))
 		category = category_table[0][0] # 顯示結果為 各風景區的種類(每次回圈只跑出一個結果)
 		introduction = item[4]
@@ -95,9 +110,8 @@ def attraction():
 					"category": category,"description": introduction,"address": address,
 					"transport": transportation,"mrt": mrt,"lat":lat ,"lng":lng,"image":new_img_list}
 		results.append(result)
-		results_dict = {"nextPage":page+1,"data":results}
+		results_dict = {"nextPage":nextPageValue,"data":results}
 		finalresult = results_convert(results_dict)
-	# return finalresult
 	return finalresult
 
 @app.route("/api/attractions/<int:attractionID>")
@@ -114,13 +128,15 @@ def get_attraction(attractionID):
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 			WHERE id = %s"
 		page_data = connect(query,(attractionID,))
-		print(page_data)
 		results = []
 		for item in page_data:
 			id = item[0]
 			attraction = item[1] # 顯示結果為 各風景區名稱(每次回圈只跑出一個結果)
-			mrt_table = connect("SELECT mrt FROM mrt WHERE mrtID = %s",(item[2],))
-			mrt = mrt_table[0][0] # 顯示結果為 各風景區所在的捷運站名稱(每次回圈只跑出一個結果)
+			if item[2] != None:
+				mrt_table = connect("SELECT mrt FROM mrt WHERE mrtID = %s",(item[2],))
+				mrt = mrt_table[0][0] # 顯示結果為 各風景區所在的捷運站名稱(每次回圈只跑出一個結果)
+			else:
+				mrt = "無鄰近捷運站"
 			category_table = connect("SELECT category FROM category WHERE categoryID = %s",(item[3],))
 			category = category_table[0][0] # 顯示結果為 各風景區的種類(每次回圈只跑出一個結果)
 			introduction = item[4]

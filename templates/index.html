@@ -21,9 +21,9 @@
     </section>
     <section class="header">
         <div id="header--text">
-            <div id="header--title">
-                <h3 class="bold">輕鬆享受台北一日悠閒</h3>
-                <div class="bold">探索每個角落，體驗城市的深度旅遊行程</div>
+            <div id="header__text">
+                <h1 class="bold" id="header--title1">輕鬆享受台北一日悠閒</h1>
+                <div class="bold" id="header--title1">探索每個角落，體驗城市的深度旅遊行程</div>
             </div>
             <div id="header--input">
                 <input type="text" id="header__input" placeholder="輸入景點名稱查詢">
@@ -35,15 +35,13 @@
     </section>
     <section class="container">
         <div id="container__div_nav--head">
-            <div id="container__div--leftbar" style="display: inline-block;">
+            <div id="container__div--leftbar">
                 <img src="../static/image/left.png">
             </div>
-            <div id="container__div_nav--content" style="display: inline-block;">
-                {% for item in taipei_mrt %}
-                <span>{{item[0]}}</span>
-                {% endfor %}
+            <div id="container__div_nav--content">
+
             </div>
-            <div id="container__div--rightbar" style="display: inline-block;">
+            <div id="container__div--rightbar">
                 <img src="../static/image/right.png">
             </div>
         </div>

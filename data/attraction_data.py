@@ -21,38 +21,39 @@ with open('taipei-attractions.json','r',encoding='utf-8') as attract_file:
 
 #=================將資料放到DATABASE的attraction table中======================
 # for item in actual_data:
-    # file = item['file']
-    # file_str = ''.join(file)
-    # file_list = file_str.split('http')
-    # picture = []
-    # for file_item in file_list:
-    #     if "jpg" in file_item :
-    #         picture.append('http' + file_item)
-    #     elif "png" in file_item :
-    #         picture.append('http' + file_item)
-    #     else:
-    #         pass
-    # name = item['name']
-    # transportation = item['direction']
-    # category = item['CAT']
-    # description = item['description']
-    # address = item['address']
-    # mrt = item['MRT']
-    # name_str = ''.join(name)
-    # transportation_str = ''.join(transportation)
-    # category_str = ''.join(category)
-    # description_str = ''.join(description)
-    # address_str = ''.join(address)
-    # lat = item['latitude']
-    # lng = item['longitude']
-    # if mrt == None:
-    #     mrt == None
-    # else:
-    #     mrt_str = ''.join(mrt)
-    # cursor = connection.cursor(dictionary=True)
-    # cursor.execute("INSERT INTO attraction(attraction,transportation,introduction,address,mrt_id,category_id,lat,lng) \
-    #                VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(name_str,transportation_str,description_str,address_str,mrt_str,category_str,lat,lng))
-    # connection.commit()
+#     file = item['file']
+#     file_str = ''.join(file)
+#     file_list = file_str.split('http')
+#     picture = []
+#     for file_item in file_list:
+#         if "jpg" in file_item :
+#             picture.append('http' + file_item)
+#         elif "png" in file_item :
+#             picture.append('http' + file_item)
+#         else:
+#             pass
+#     name = item['name']
+#     transportation = item['direction']
+#     category = item['CAT']
+#     description = item['description']
+#     address = item['address']
+#     mrt = item['MRT']
+#     name_str = ''.join(name)
+#     transportation_str = ''.join(transportation)
+#     category_str = ''.join(category)
+#     description_str = ''.join(description)
+#     address_str = ''.join(address)
+#     lat = item['latitude']
+#     lng = item['longitude']
+#     if mrt == None:
+#         mrt_str = None
+#         print(mrt_str)
+#     else:
+#         mrt_str = ''.join(mrt)
+#     cursor = connection.cursor(dictionary=True)
+#     cursor.execute("INSERT INTO attraction(attraction,transportation,introduction,address,mrt_id,category_id,lat,lng) \
+#                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(name_str,transportation_str,description_str,address_str,mrt_str,category_str,lat,lng))
+#     connection.commit()
 #=============================================================================
 #=================建立img table===============================================
 # for index, item in enumerate(actual_data):
@@ -61,6 +62,7 @@ with open('taipei-attractions.json','r',encoding='utf-8') as attract_file:
 #     file_list = file_str.split('http')
 #     picture_list = []
 #     for file_item in file_list:
+#         print(file_item)
 #         lowerCase = file_item.lower()
 #         if "jpg" in lowerCase :
 #             picture_list.append('http' + file_item)
@@ -68,6 +70,7 @@ with open('taipei-attractions.json','r',encoding='utf-8') as attract_file:
 #             picture_list.append('http' + file_item)
 #         else:
 #             pass
+#         print(file_item)
 #     new_index = index + 1
 #     for picture in picture_list:
 #         cursor = connection.cursor(dictionary=True)
