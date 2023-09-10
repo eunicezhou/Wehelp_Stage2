@@ -4,7 +4,7 @@ from mysql.connector import pooling
 from flask_cors import CORS
 import json
 app=Flask(__name__)
-# try
+#test
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
 	return response
