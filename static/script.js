@@ -9,10 +9,12 @@ async function mrtlist(){
     const mrtdata = data.data
     let i;
     for(i=0;i<mrtdata.length;i++){
-        const wrapText = document.createElement("div");
+        if(mrtdata[i]!==null){
+            const wrapText = document.createElement("div");
         let mrtText = document.createTextNode(mrtdata[i]);
         wrapText.appendChild(mrtText);
         mrtDiv.appendChild(wrapText);
+        }
     }
     mrtBar.innerHTML = mrtDiv.innerHTML;
 }
