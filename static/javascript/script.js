@@ -32,6 +32,8 @@ mrt.addEventListener('click',function mrtStation(){
         i++;
     }
     keyword = event.target.innerHTML;
+    const search = document.querySelector("#header__input");
+    search.value = `${keyword}`
     currentPage = 0
     observer.observe(footer);
 })
@@ -97,10 +99,13 @@ async function getAttraction(){
             let attractionInmation = {'category':site["category"],
             'imageURL':site["image"][0],
             'mrt':site["mrt"],
-            'name':site["name"]}
+            'name':site["name"],
+            'id':site["id"]}
             wrapAttraction.innerHTML=`
-                <div class="attractionImage" style="background-image:url(${attractionInmation['imageURL']})">
-                </div>
+                <a href="/attraction/${attractionInmation['id']}">
+                    <div id="${attractionInmation['id']}" class="attractionImage" style="background-image:url(${attractionInmation['imageURL']})">
+                    </div>
+                </a>
                 <div class="attractionName bold">${attractionInmation['name']}</div>
                 <div class="description bold">
                     <div class="floatLeft">${attractionInmation['mrt']}</div>

@@ -1,7 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam&family=Noto+Sans+TC&display=swap');
 body{
     padding: 0%;
     margin: 0%;
-    font-family: Noto Sans TC ,sans-serif;
+    font-family: 'Noto Sans TC', sans-serif;
     font-size: 16px;
     line-height: 13.3px;
 }
@@ -53,7 +54,7 @@ button{
 
 /* 設定header */
 .header{
-    background-image: url(./image/[orig]\ welcome\ image.jpg);
+    background-image: url(../image/[orig]\ welcome\ image.jpg);
     background-size: cover;
     height: 320px;
     margin-top: 0px;
@@ -62,7 +63,6 @@ button{
     align-items: center;
     position: relative;
     top:54px;
-    
 }
 #header--text{
     display:grid;
@@ -176,11 +176,6 @@ button{
     border:1px #666666;
     background-color: #448899;
 }
-.attractionImge img{
-    width: 100%;
-    height:100%;
-    object-fit: cover;
-}
 .attractionName{
     width: 270px;
     box-sizing: border-box;
@@ -221,79 +216,7 @@ button{
     position: relative;
     top:54px;
 }
-/*attraction.html部分*/
-.content--header{
-    display:inline-flex;
-    width:1200px;
-    box-sizing: border-box;
-    padding:0 15px ;
-    justify-content: space-between;
-    position: relative;
-    top:54px;
-    margin-top: 40px;
-}
-.header--left{
-    background-color: #666666;
-    width:540px;
-    display: flex;
-    justify-content:space-between ;
-    align-items: center;
-}
-.header__div--leftbar{
-    z-index: 2;
-    height: 36px;
-    margin-left: 10px;
-}
-.header__div--rightbar{
-    z-index: 2;
-    height: 36px;
-    margin-right: 10px;
-}
-.header--right{
-    background-color: aquamarine;
-    width:600px;
-    display:grid;
-    grid-template-rows: 43px 15px 22px 20px 302px;
-}
-.attraction{
-    grid-row: 1/2;
-}
-.categoryAndMrt{
-    grid-row: 3/4;
-}
-.header__div_form{
-    grid-row: 5/6;
-    background-color: aliceblue;
-    display:grid;
-    grid-gap:15px;
-    padding: 15px 20px 0px 20px;
-    align-items: center;
-}
-.purchase{
-    color:black;
-    margin:0;
-}
-.header__div_form>form{
-    height: 200px;
-}
-.header__div_form label{
-    color:black;
-}
-.nextline{
-    display:block;
-    width:100%;
-    height: 15px;
-}
-.content--bottom{
-    position: relative;
-    top:94px;
-}
-.content__form_btn{
-    box-sizing: border-box;
-    width:190px;
-    height:36px;
-    padding:10px 20px;
-}
+
 @media(max-width:1200px){
     .nav{
         width: 100vw;

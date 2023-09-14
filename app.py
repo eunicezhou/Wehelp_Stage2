@@ -40,7 +40,7 @@ def connect(execute_str,execute_argument=None):
 #================api===============================================================
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 @app.route("/api/attractions")
-def attraction():
+def apiattraction():
 	page = request.args.get("page")
 	keyword = request.args.get("keyword")
 	# print(keyword)
@@ -170,9 +170,9 @@ def mrt_api():
 @app.route("/")
 def index():
 	return render_template("index.html")
-# @app.route("/attraction/<id>")
-# def attraction(id):
-# 	return render_template("attraction.html")
+@app.route("/attraction/<id>")
+def attraction(id):
+	return render_template("attraction.html")
 # @app.route("/booking")
 # def booking():
 # 	return render_template("booking.html")
