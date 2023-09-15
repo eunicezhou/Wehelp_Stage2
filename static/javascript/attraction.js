@@ -62,7 +62,8 @@ function attractionInformation(){
 attractionInformation()
 let index = 0;
 function movePicture(){
-    let width = 540;
+    let width = outer.offsetWidth;
+    console.log(width);
     let imgList = outer.querySelectorAll(".images>img");
     if(index > imgList.length-1){
         index = 0;
