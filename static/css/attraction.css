@@ -36,6 +36,7 @@ button{
     background-color: white;
     position: fixed;
     top:0px;
+    left:calc(50% - 600px);
     z-index: 10;
 }
 .nav--content{
@@ -148,6 +149,19 @@ span.bold{
     color:black;
     margin:0;
 }
+input[type="date"]::-webkit-calendar-picker-indicator {    
+    opacity:0;
+}
+input[type="date"]{
+    background-image: url("/static/image/icon_calendar.png");
+    background-repeat: no-repeat;
+    background-size: 24px 24px;
+    background-position-x: 95%;
+    background-position-y:30%;
+    height: 34px;
+    width: 150px;
+    border:none;
+}
 input[type="radio"]{
     appearance: none;
     background-color: white;
@@ -234,6 +248,7 @@ input[type="radio"]{
     }
     .nav{
         width: 100vw;
+        left:0;
         box-sizing: border-box;
         padding: 10px;
     }
