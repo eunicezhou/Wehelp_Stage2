@@ -176,6 +176,9 @@ button{
     border:1px #666666;
     background-color: #448899;
 }
+.attractionImage:hover{
+    filter: brightness(120%);
+}
 .attractionName{
     width: 270px;
     box-sizing: border-box;

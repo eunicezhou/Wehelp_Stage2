@@ -145,12 +145,30 @@ button{
     align-items: center;
     border-radius: 5px;
 }
-.form--bookingtime[type="radio"]{
-    accent-color: #448899;
-    /* appearance: none; */
+span.bold{
+    color:black;
+    margin:0;
+}
+input[type="radio"]{
+    appearance: none;
     background-color: white;
     border:white 2px solid;
-  }
+    width: 22px;
+    height:22px;
+    border-radius:50%;
+}
+.form{
+    display: flex;
+    align-items: center;
+}
+.form--bookingtime{
+    width: 22px;
+    height:22px;
+    &:checked{
+        background-color: #448899;
+        border: 2px solid white;
+    }
+}
 .purchase{
     color:black;
     margin:0;

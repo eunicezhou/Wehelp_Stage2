@@ -58,11 +58,10 @@ def apiattraction():
 	execute_argument = page*12
 	if keyword == None:
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng \
-			FROM attraction WHERE mrt_id IS NULL OR mrt_id IS NOT NULL\
-			LIMIT 12 OFFSET %s"
+			FROM attraction LIMIT 12 OFFSET %s"
 		print(query)
 		nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
-		WHERE mrt_id IS NULL OR mrt_id IS NOT NULL LIMIT 1 OFFSET %s"
+		 LIMIT 1 OFFSET %s"
 		page_data = connect(query,(execute_argument,))
 		nextPage_data = connect(nextPage,(execute_argument+12,))
 		if nextPage_data == []:
