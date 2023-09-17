@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kalam&family=Noto+Sans+TC&display=swap');
-body{
-    padding: 0%;
-    margin: 0%;
+html,body{
+    padding: 0;
+    margin: 0;
     font-family: 'Noto Sans TC', sans-serif;
     font-size: 16px;
     line-height: 13.3px;
@@ -35,6 +35,8 @@ button{
     justify-content: center;
     background-color: white;
     position: fixed;
+    box-sizing: border-box;
+    padding: 10px 15px;
     top:0px;
     left:calc(50% - 600px);
     z-index: 10;
@@ -49,7 +51,8 @@ button{
     color:#448899;
     font-size: larger;
     font-weight: 700;
-}/* 設定header */
+}
+/* 設定header */
 .content--header{
     width:1200px;
     margin-left:auto ;
@@ -241,13 +244,8 @@ input[type="radio"]{
     top:54px;
 }
 @media(max-width:1200px){
-    body{
-        width:100vw;
-        margin-left:auto ;
-        margin-right:auto ;
-    }
     .nav{
-        width: 100vw;
+        width: 100%;
         left:0;
         box-sizing: border-box;
         padding: 10px;
@@ -256,29 +254,30 @@ input[type="radio"]{
         width: 100%;
     }
     .content--header{
-        width:100vw;
+        width:100%;
     }
     .wrap-header{
-        width:100vw;
+        width:100%;
         margin:0 auto ;
     }
     .header--right{
-        width:60vw;
-        margin:0 20px 0 30px;
+        width:60%;
+        margin:0 0 0 30px;
     }
     .main{
-        width:100vw;
+        width:98%;
     }
     .content--bottom{
-        width:100vw;
+        width:100%;
+        padding-right: 10px;
     }
     .footer{
-        width:100vw;
+        width:100%;
     }
 }
 @media(max-width:800px){
     .content--header{
-        width:100vw;
+        width:100%;
         padding: 0;
     }
     .wrap-header{
