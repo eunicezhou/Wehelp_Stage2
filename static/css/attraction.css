@@ -31,12 +31,12 @@ button{
 /* 設定navbar */
 .nav{
     display: flex ;
+    width:100vw;
     height:54px;
     justify-content: center;
     background-color: white;
     position: fixed;
     top:0px;
-    left:calc(50% - 600px);
     z-index: 10;
     border-bottom: #e8e8e8 1px solid;
 }
