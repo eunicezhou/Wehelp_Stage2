@@ -57,12 +57,13 @@ button{
 /* 設定header */
 .content--header{
     width:1200px;
+    margin-top:40px;
     margin-left:auto ;
     margin-right:auto ;
     box-sizing: border-box;
     padding: 0 15px;
     position: relative;
-    top:94px;
+    top:54px;
 }
 .wrap-header{
     display:inline-flex;
@@ -216,7 +217,7 @@ input[type="radio"]{
 .main{
     border-bottom: #e8e8e8 solid 1px;
     position:relative;
-    top:125px;
+    top:85px;
     left:0;
     right:0;
     width:1200px;
@@ -232,7 +233,7 @@ input[type="radio"]{
     box-sizing: border-box;
     padding: 10px;
     position:relative;
-    top:125px;
+    top:85px;
     text-align:justify;
 }
 .footer{
@@ -256,6 +257,7 @@ input[type="radio"]{
         width: 100%;
     }
     .content--header{
+        margin-top: 0px;
         width:100%;
     }
     .wrap-header{
