@@ -4,7 +4,7 @@ html,body{
     margin: 0;
     font-family: 'Noto Sans TC', sans-serif;
     font-size: 16px;
-    line-height: 13.3px;
+    /* line-height: 13.3px; */
 }
 /* 設定字型大小及字高 */
 h1{
@@ -38,6 +38,7 @@ button{
     top:0px;
     left:calc(50% - 600px);
     z-index: 10;
+    border-bottom: #e8e8e8 1px solid;
 }
 .nav--content{
     display: inline-flex;
@@ -51,6 +52,7 @@ button{
     color:#448899;
     font-size: larger;
     font-weight: 700;
+    margin-top: 10px;
 }
 /* 設定header */
 .content--header{
@@ -60,7 +62,7 @@ button{
     box-sizing: border-box;
     padding: 0 15px;
     position: relative;
-    top:54px;
+    top:94px;
 }
 .wrap-header{
     display:inline-flex;
@@ -214,7 +216,7 @@ input[type="radio"]{
 .main{
     border-bottom: #e8e8e8 solid 1px;
     position:relative;
-    top:85px;
+    top:125px;
     left:0;
     right:0;
     width:1200px;
@@ -230,7 +232,7 @@ input[type="radio"]{
     box-sizing: border-box;
     padding: 10px;
     position:relative;
-    top:85px;
+    top:125px;
     text-align:justify;
 }
 .footer{
