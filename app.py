@@ -165,6 +165,38 @@ def mrt_api():
 		results_dict = {"data":mrt_list}
 		finalresult = results_convert(results_dict)
 	return finalresult
+
+#註冊會員api
+@app.route("/api/user",methods=["POST"])
+def memberSignup():
+	data = request.get_json()
+	username = data.get("name")
+	email = data.get("email")
+	password = data.get("password")
+	print(type(username))
+	print(type(email))
+	print(type(password))
+	emailList = connect("SELECT email FROM member")
+	if email in emailList:
+		result = {"error": True,"message": "此信箱已註冊"}
+		finalresult = results_convert(result)
+		return finalresult,400
+	else:
+		connect("INSERT INTO member(name,email,password) VALUES(%s,%s,%s)",(username,email,password))
+		print((username,email,password))
+		result = {"ok":True}
+		finalresult = results_convert(result)
+		return finalresult
+
+@app.route("/api/user/auth", methods=["PUT"])
+def memberSignin():
+	data = request.get_json()
+	email = data.get("email")
+	password = data.get("password")
+	print(email)
+	print(password)
+	return "get datas!!!"
+
 #=================================================================================
 @app.route("/")
 def index():

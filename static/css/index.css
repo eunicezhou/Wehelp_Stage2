@@ -106,6 +106,24 @@ button{
     width: 30px;
     height: 30px;
 }
+/*設定彈出視窗*/
+#signin,#signup{
+    cursor: pointer;
+}
+#signBTN{
+    cursor: pointer;
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+    background-color:#448899;
+    border-radius:6px;
+    margin:0 auto;
+    color:white;
+}
+.signLink{
+    cursor: pointer;
+}
 /* 設定content部分 */
 .container{
     width: 1200px;
