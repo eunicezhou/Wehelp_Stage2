@@ -43,6 +43,8 @@ button{
 .nav--content{
     display: inline-flex;
     width:1200px;
+    box-sizing: border-box;
+    padding: 10px 15px;
     justify-content: space-between;
     align-items: center;
 }
@@ -107,7 +109,7 @@ button{
     height: 30px;
 }
 /*設定彈出視窗*/
-#signin,#signup{
+#signin,#signup,#signout{
     cursor: pointer;
 }
 #signBTN{
@@ -123,6 +125,66 @@ button{
 }
 .signLink{
     cursor: pointer;
+}
+.signForm{
+    z-index:20;
+    position:absolute;
+    top: 26px;
+    width:340px;
+    margin: 0 auto;
+    z-index: 20;
+    background-color: white;
+    border-radius:6px;
+    text-align:center;
+}
+.signForm::placeholder{
+    color:#E8E8E8;
+    font-weight:bold;
+}
+#decoratorbar{
+    width:340px;
+    height:10px;
+    border-radius:6px 6px 0 0;
+    background:linear-gradient(to right, #6AB, #448899);
+}
+#closeBTN{
+    position:absolute;
+    top:20px;
+    right:10px;
+}
+#name{
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+}
+#email{
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+}
+#password{
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+    margin:10px 0 ;
+}
+#shelder{
+    width:100vw;
+    height:100vw;
+    background-color:#666666;
+    opacity:0.3;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:10;
+}
+#alert{
+    visibility: hidden;
+    color:red;
+    margin:10px 0 0 0;
 }
 /* 設定content部分 */
 .container{
@@ -242,6 +304,7 @@ button{
 @media(max-width:1200px){
     .nav{
         width: 100vw;
+        left:0;
         box-sizing: border-box;
         padding: 10px;
     }
