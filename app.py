@@ -3,6 +3,10 @@ import mysql.connector
 from mysql.connector import pooling
 from flask_cors import CORS
 import json
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
+
 app=Flask(__name__)
 #test
 def results_convert(result):
@@ -29,13 +33,15 @@ def connect(execute_str,execute_argument=None):
 		cursor.execute("USE stage2")
 		cursor.execute(execute_str,execute_argument)
 		result = cursor.fetchall()
-	except:
-		print("出現錯誤訊息")
+		connection.commit()
+	except Exception as err:
+		print(err)
 		result = None
 	finally:
 		cursor.close()
 		connection.close()
 	return result
+
 #==================================================================================
 #================api===============================================================
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -165,6 +171,80 @@ def mrt_api():
 		results_dict = {"data":mrt_list}
 		finalresult = results_convert(results_dict)
 	return finalresult
+
+#註冊會員api
+@app.route("/api/user",methods=["POST"])
+def memberSignup():
+	data = request.get_json()
+	username = data.get("name")
+	email = data.get("email")
+	password = data.get("password")
+	emailList = list(connect("SELECT email FROM member"))
+	check = False
+	for item in emailList:
+		if email in item[0]:
+			result = {"error": True,"message": "此信箱已註冊"}
+			finalresult = results_convert(result)
+			status = 400
+			check = True
+			break
+	if check == False:
+		try:
+			connect("INSERT INTO member(name,email,password) VALUES(%s,%s,%s)",(username,email,password))
+			result = {"ok":True}
+			finalresult = results_convert(result)
+			status = 200
+			# return finalresult
+		except Exception as err:
+			result = {"error": True,"message": err}
+			print(result)
+			finalresult = results_convert(result)
+			status = 500
+	return finalresult,status
+			
+#登入會員api
+@app.route("/api/user/auth", methods=["PUT","GET"])
+def login():
+	if request.method == "PUT":
+		data = request.get_json()
+		email = data.get("email")
+		password = data.get("password")
+		memberInfor = connect("SELECT email,password FROM member")
+		try:
+			if (email,password) in memberInfor:
+				baseInfor = connect("SELECT id,name,email FROM member WHERE email = %s AND password = %s",(email,password))
+				filedict = {
+					"id":baseInfor[0][0],
+					"name":baseInfor[0][1],
+					"email":baseInfor[0][2],
+					"exp":datetime.utcnow()+timedelta(days=7)
+				}
+				encode_token = jwt.encode(filedict, 'private_key',algorithm='HS256')
+				return jsonify({"token":encode_token})
+			else:
+				result = {"error": True,"message": "信箱或密碼錯誤"}
+				finalresult = results_convert(result)
+				return finalresult,400
+		except Exception as err:
+			result = {"error": True,"message": err}
+			finalresult = results_convert(result)
+			return finalresult,500
+	else:
+		try:
+			token = request.headers.get('Authorization')
+			if token:
+				decode_token = token.split('Bearer ')
+				information = jwt.decode(decode_token[1], 'private_key', algorithms=['HS256'])
+				print(information.pop("exp"))
+				print(information)
+				return jsonify({"data":information})
+			else:
+				return redirect("/")
+		except Exception as err:
+			result = {"error": True,"message": err}
+			finalresult = results_convert(result)
+			return finalresult,500
+			
 #=================================================================================
 @app.route("/")
 def index():
