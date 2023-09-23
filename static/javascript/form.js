@@ -308,7 +308,7 @@ function getValue(){
                         let data = response.json();
                         return data;
                     }).then((data)=>{
-                        username = data.key.name;
+                        username = data.data.name;
                         localStorage.setItem('username', username);
                         return username;
                     })
@@ -326,6 +326,20 @@ function getValue(){
 //頁面重新loadin的function
 window.addEventListener('load', function() {
     let token = localStorage.getItem('token');
+    if(token){
+        fetch('/api/user/auth',
+            {method:"GET",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": `Bearer ${token}`
+            }}).then((response)=>{
+                let data = response.json();
+                return data;
+            }).then((data)=>{
+                username = data.data.name;
+                localStorage.setItem('username', username);
+            })
+    }
     let isLoggedIn = localStorage.getItem('isLoggedIn');
     let username = localStorage.getItem('username');
     let sign = document.querySelector("#sign");
@@ -338,6 +352,7 @@ window.addEventListener('load', function() {
         //登出系統
         let signout = document.querySelector("#signout");
         signout.addEventListener('click',function signout(){
+            localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             location.reload();

@@ -213,9 +213,15 @@ def login():
 		try:
 			if (email,password) in memberInfor:
 				baseInfor = connect("SELECT id,name,email FROM member WHERE email = %s AND password = %s",(email,password))
-				encode = {"name":baseInfor[0][1],"exp":datetime.utcnow()+timedelta(days=7)}
-				encode_jwt = jwt.encode(encode, 'private_key',algorithm='HS256')
-				return jsonify({"token":encode_jwt})
+				filedict = {
+					"id":baseInfor[0][0],
+					"name":baseInfor[0][1],
+					"email":baseInfor[0][2],
+					"exp":datetime.utcnow()+timedelta(days=7)
+				}
+				# print(filedict.pop("id"))
+				encode_token = jwt.encode(filedict, 'private_key',algorithm='HS256')
+				return jsonify({"token":encode_token})
 			else:
 				result = {"error": True,"message": "信箱或密碼錯誤"}
 				finalresult = results_convert(result)
@@ -229,9 +235,10 @@ def login():
 			token = request.headers.get('Authorization')
 			if token:
 				decode_token = token.split('Bearer ')
-				privatekey = jwt.decode(decode_token[1], 'private_key', algorithms=['HS256'])
-				print(privatekey)
-				return jsonify({"key":privatekey})
+				information = jwt.decode(decode_token[1], 'private_key', algorithms=['HS256'])
+				print(information.pop("exp"))
+				print(information)
+				return jsonify({"data":information})
 			else:
 				return redirect("/")
 		except Exception as err:
