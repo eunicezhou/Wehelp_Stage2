@@ -219,7 +219,6 @@ def login():
 					"email":baseInfor[0][2],
 					"exp":datetime.utcnow()+timedelta(days=7)
 				}
-				# print(filedict.pop("id"))
 				encode_token = jwt.encode(filedict, 'private_key',algorithm='HS256')
 				return jsonify({"token":encode_token})
 			else:

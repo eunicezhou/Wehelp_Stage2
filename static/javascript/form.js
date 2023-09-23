@@ -298,23 +298,8 @@ function getValue(){
                 }else{
                     let token = data.token;
                     localStorage.setItem('token', token);
-                    token = localStorage.getItem('token');
-                    fetch('/api/user/auth',
-                    {method:"GET",
-                    headers:{
-                        "Content-Type":"application/json",
-                        "Authorization": `Bearer ${token}`
-                    }}).then((response)=>{
-                        let data = response.json();
-                        return data;
-                    }).then((data)=>{
-                        username = data.data.name;
-                        localStorage.setItem('username', username);
-                        return username;
-                    })
                     alertDIV.innerHTML="成功登入";
                     alertDIV.style.visibility="visible";
-                    localStorage.setItem('isLoggedIn', 'true');
                     setTimeout(function() {
                         location.reload();
                     }, 800);
@@ -337,25 +322,16 @@ window.addEventListener('load', function() {
                 return data;
             }).then((data)=>{
                 username = data.data.name;
-                localStorage.setItem('username', username);
+                let sign = document.querySelector("#sign");
+                sign.innerHTML = `
+                    <span id="user">${username}</span>
+                    <span id="signout">登出系統</span>
+                `;
+                let signout = document.querySelector("#signout");
+                signout.addEventListener('click',function signout(){
+                localStorage.removeItem('token');
+                location.reload();
+                })
             })
-    }
-    let isLoggedIn = localStorage.getItem('isLoggedIn');
-    let username = localStorage.getItem('username');
-    let sign = document.querySelector("#sign");
-    console.log(isLoggedIn);
-    if (token && isLoggedIn === 'true') {
-        sign.innerHTML = `
-            <span id="user">${username}</span>
-            <span id="signout">登出系統</span>
-        `;
-        //登出系統
-        let signout = document.querySelector("#signout");
-        signout.addEventListener('click',function signout(){
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            location.reload();
-        })
-    }
-});
+        } 
+    });
