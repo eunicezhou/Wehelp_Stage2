@@ -308,7 +308,8 @@ function getValue(){
                         let data = response.json();
                         return data;
                     }).then((data)=>{
-                        username = data.name;
+                        username = data.key.name;
+                        localStorage.setItem('username', username);
                         return username;
                     })
                     alertDIV.innerHTML="成功登入";
@@ -324,19 +325,22 @@ function getValue(){
 }
 //頁面重新loadin的function
 window.addEventListener('load', function() {
+    let token = localStorage.getItem('token');
     let isLoggedIn = localStorage.getItem('isLoggedIn');
+    let username = localStorage.getItem('username');
     let sign = document.querySelector("#sign");
     console.log(isLoggedIn);
-    if (isLoggedIn === 'true') {
+    if (token && isLoggedIn === 'true') {
         sign.innerHTML = `
+            <span id="user">${username}</span>
             <span id="signout">登出系統</span>
         `;
         //登出系統
-        isLoggedIn = localStorage.setItem('isLoggedIn', 'false')
         let signout = document.querySelector("#signout");
         signout.addEventListener('click',function signout(){
-        localStorage.removeItem('token');
-        location.reload();
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            location.reload();
         })
     }
 });

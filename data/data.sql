@@ -115,7 +115,7 @@ CREATE TABLE `member` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +124,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'周紫珍','zizhen0826@gmail.com','password'),(2,'林韋杰','nick@gmail.com','851025'),(3,'測試1號','1111@gmail.com','1111'),(4,'測試者2號','22222@gmail.com','22222'),(5,'阿杰','jjjjj@gmail.com','jjjjj'),(6,'test2222','test2222@gmail.com','testtest');
+INSERT INTO `member` VALUES (1,'周紫珍','zizhen0826@gmail.com','password'),(2,'test','testtest@gmail.com','8888'),(3,'nick','nick858585@gmail.com','nik');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-22 19:52:47
+-- Dump completed on 2023-09-23 10:38:05

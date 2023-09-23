@@ -179,24 +179,28 @@ def memberSignup():
 	username = data.get("name")
 	email = data.get("email")
 	password = data.get("password")
-	emailList = connect("SELECT email FROM member")
+	emailList = list(connect("SELECT email FROM member"))
+	check = False
 	for item in emailList:
 		if email in item[0]:
 			result = {"error": True,"message": "此信箱已註冊"}
 			finalresult = results_convert(result)
-			return finalresult,400
-		else:
-			try:
-				connect("INSERT INTO member(name,email,password) VALUES(%s,%s,%s)",(username,email,password))
-				print((username,email,password))
-				result = {"ok":True}
-				finalresult = results_convert(result)
-				return finalresult
-			except Exception as err:
-				result = {"error": True,"message": err}
-				print(result)
-				finalresult = results_convert(result)
-				return finalresult,500
+			status = 400
+			check = True
+			break
+	if check == False:
+		try:
+			connect("INSERT INTO member(name,email,password) VALUES(%s,%s,%s)",(username,email,password))
+			result = {"ok":True}
+			finalresult = results_convert(result)
+			status = 200
+			# return finalresult
+		except Exception as err:
+			result = {"error": True,"message": err}
+			print(result)
+			finalresult = results_convert(result)
+			status = 500
+	return finalresult,status
 			
 #登入會員api
 @app.route("/api/user/auth", methods=["PUT","GET"])
