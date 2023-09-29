@@ -5,6 +5,7 @@ let signLink;
 let exist = false; //預設exist為false
 
 //建立登入表單
+const body = document.querySelector("body");
 function bulidupSigninForm(){
     signForm = document.createElement('div');
     signForm.setAttribute('class',"signForm");
@@ -52,7 +53,7 @@ function bulidupSigninForm(){
     other.appendChild(other1);
     other.appendChild(other2);
     signForm.appendChild(other);
-    header.appendChild(signForm);
+    body.appendChild(signForm);
 }
 //建立註冊表單
 function buildupSignupForm(){
@@ -108,12 +109,11 @@ function buildupSignupForm(){
     other.appendChild(other1);
     other.appendChild(other2);
     signForm.appendChild(other);
-    header.appendChild(signForm);
+    body.appendChild(signForm);
 }
 
 //建立遮罩
 let shelder;
-const body = document.querySelector("body");
 function shelderCreate(){
     if(!shelder){
         shelder = document.createElement("div");
@@ -144,7 +144,7 @@ function fakeAlert(target){
         }
     }else{
         signForm = document.querySelector(".signForm");
-        header.removeChild(signForm);
+        body.removeChild(signForm);
         exist = false; //將exist轉為false
         shelderCreate();
         fakeAlert(target);
@@ -153,7 +153,7 @@ function fakeAlert(target){
 
 //建立點擊叉叉關閉表單的監聽事件
 function closeFile(){
-    header.removeChild(signForm);
+    body.removeChild(signForm);
     body.removeChild(shelder);
     shelder = null;
     exist = false;
@@ -182,7 +182,7 @@ function signEvent(target){
     signBTN.addEventListener('click',getValue);
     signLink = document.querySelector(".signLink");
     signLink.addEventListener('click',()=>{
-        header.removeChild(signForm);
+        body.removeChild(signForm);
         if(target==="signin"){
             buildupSignupForm();
             signEvent("signup");
@@ -197,7 +197,6 @@ signin.addEventListener('click',()=>{
     let targetID = event.target.id;
     fakeAlert(targetID);
     signEvent(targetID);
-    return exist;
 });
 
 //點擊註冊按鈕
@@ -205,8 +204,20 @@ signup.addEventListener('click',()=>{
     let targetID = event.target.id;
     fakeAlert(targetID);
     signEvent(targetID);
-    return exist;
 });
+
+//點擊預定按鈕
+const purchase = document.querySelector("#purchase");
+purchase.addEventListener('click',()=>{
+    let token = localStorage.getItem('token');
+    if(!token){
+        let targetID = "signin";
+        fakeAlert(targetID);
+        signEvent(targetID);
+    }else{
+        window.location.href = '/booking';
+    }
+})
 
 //檢查註冊及登入表單資料
 function getValue(){
@@ -291,6 +302,9 @@ function getValue(){
                     if(data["message"]==="信箱或密碼錯誤"){
                         alertDIV.innerHTML="信箱或密碼錯誤";
                         alertDIV.style.visibility="visible";
+                    }else if(data["message"]==="此信箱未註冊"){
+                        alertDIV.innerHTML="此信箱未註冊";
+                        alertDIV.style.visibility="visible";
                     }else{
                         alertDIV.innerHTML="伺服器錯誤";
                         alertDIV.style.visibility="visible";
@@ -332,6 +346,7 @@ window.addEventListener('load', function() {
                 localStorage.removeItem('token');
                 location.reload();
                 })
+                return username;
             })
         } 
     });
