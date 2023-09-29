@@ -13,7 +13,10 @@ let user = fetch('/api/user/auth',
         return data.data.name;})
 
 function init(token) {
-    fetch('/api/booking',
+    if(!token){
+        window.location.href="/";
+    }else{
+        fetch('/api/booking',
         {method:"GET",
         headers:{
             "Content-Type":"application/json",
@@ -76,6 +79,8 @@ function init(token) {
             let deleteCan = document.querySelector(".delete");
             deleteCan.addEventListener('click',deleteSession)
         })
+    }
+    
     }
 window.addEventListener('load',init(token));
 

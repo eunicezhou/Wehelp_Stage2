@@ -7,8 +7,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-    top:54px;
     line-height: 13.3px;
 }
 #header--text{
@@ -58,8 +56,6 @@
     width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    position: relative;
-    top:54px;
 }
 #container__div_nav--head{
     margin-top: 15px;
@@ -136,8 +132,6 @@
     color:white;
     display: flex;
     align-items: center;
-    position: relative;
-    bottom: 40px;
     z-index: 2;
     margin-bottom: 0px;
 }
@@ -152,8 +146,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    bottom: 40px;
     color:#757575
 }
 
@@ -164,8 +156,6 @@
     font-size:0.8em;
     padding-top: 50px;
     background-color: gray;
-    position: relative;
-    top:54px;
 }
 
 @media(max-width:1200px){

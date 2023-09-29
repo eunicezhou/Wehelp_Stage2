@@ -5,6 +5,7 @@ let signLink;
 let exist = false; //預設exist為false
 
 //建立登入表單
+const body = document.querySelector("body");
 function bulidupSigninForm(){
     signForm = document.createElement('div');
     signForm.setAttribute('class',"signForm");
@@ -52,7 +53,7 @@ function bulidupSigninForm(){
     other.appendChild(other1);
     other.appendChild(other2);
     signForm.appendChild(other);
-    header.appendChild(signForm);
+    body.appendChild(signForm);
 }
 //建立註冊表單
 function buildupSignupForm(){
@@ -108,12 +109,11 @@ function buildupSignupForm(){
     other.appendChild(other1);
     other.appendChild(other2);
     signForm.appendChild(other);
-    header.appendChild(signForm);
+    body.appendChild(signForm);
 }
 
 //建立遮罩
 let shelder;
-const body = document.querySelector("body");
 function shelderCreate(){
     if(!shelder){
         shelder = document.createElement("div");
@@ -144,7 +144,7 @@ function fakeAlert(target){
         }
     }else{
         signForm = document.querySelector(".signForm");
-        header.removeChild(signForm);
+        body.removeChild(signForm);
         exist = false; //將exist轉為false
         shelderCreate();
         fakeAlert(target);
@@ -153,7 +153,7 @@ function fakeAlert(target){
 
 //建立點擊叉叉關閉表單的監聽事件
 function closeFile(){
-    header.removeChild(signForm);
+    body.removeChild(signForm);
     body.removeChild(shelder);
     shelder = null;
     exist = false;
@@ -182,7 +182,7 @@ function signEvent(target){
     signBTN.addEventListener('click',getValue);
     signLink = document.querySelector(".signLink");
     signLink.addEventListener('click',()=>{
-        header.removeChild(signForm);
+        body.removeChild(signForm);
         if(target==="signin"){
             buildupSignupForm();
             signEvent("signup");

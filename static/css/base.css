@@ -36,7 +36,7 @@ button{
 /* 設定navbar */
 .nav{
     display: flex ;
-    width:100vw;
+    width:100%;
     height:54px;
     justify-content: center;
     background-color: white;
@@ -80,13 +80,15 @@ button{
 }
 .signForm{
     position:fixed;
-    top: 26px;
+    top: 30%;
+    left:50%;
     width:340px;
-    margin: 0 calc(50% - 170px);
+    margin: 0 auto;
     z-index: 20;
     background-color: white;
     border-radius:6px;
     text-align:center;
+    transform: translate(-50%,-50%);
 }
 .signForm::placeholder{
     color:#E8E8E8;
@@ -150,7 +152,7 @@ button{
 }
 @media(max-width:1200px){
     .nav{
-        width: 100vw;
+        width: 100%;
         left:0;
         box-sizing: border-box;
         padding: 10px;
