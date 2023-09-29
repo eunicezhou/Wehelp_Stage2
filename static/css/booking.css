@@ -7,25 +7,23 @@
 }
 .wrapper{
     width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 .header{
     width:1000px;
-    position:relative;
-    top:94px;
     margin: 0 auto;
 }
 #header--top{
+    margin-top: 10px;
     display: flex;
     align-items: flex-start;
     color:#666666;
 }
+.record{
+    padding: 0 10px 10px;
+}
 .header--buttom{
     height:200px;
-    margin-top: 30px;
     display: inline-flex;
     justify-content: space-between;
 }
@@ -50,7 +48,8 @@
 .header--attraction{
     color:#448899;
     margin: 0;
-    position: relative;
+    display: inline-flex;
+    justify-content: space-between;
 }
 .purchase{
     display: grid;
@@ -58,23 +57,17 @@
     grid-gap:10px;
 }
 .delete{
-    position:absolute;
-    right:0;
+
     align-items: center;
 }
 .main{
     border-bottom: #e8e8e8 solid 1px;
-    position:relative;
-    left:0;
-    right:0;
     width:1200px;
     margin:0 auto;
 }
 .content{
     width:1200px;
-    position: relative;
-    top:125px;
-    margin: 0 auto;
+    margin: 30px auto 0;
 }
 .content__div{
     width:1000px;
@@ -126,9 +119,6 @@
     color:white;
     font-weight: 400;
 }
-.footer{
-    top:125px;
-}
 @media(max-width:1200px){
     .header{
         width:100%;
@@ -140,6 +130,7 @@
     }
     .header--buttom{
         width:100%;
+        height: auto;
     }
     .content{
         width:100%;
@@ -170,14 +161,9 @@
         width:100%;
         padding: 0;
         margin: 0;
-        position:absolute;
-        left:0;
     }
     .header--right{
         width:100%;
-        position: absolute;
-        top:255px;
-        left:0;
         margin: 0;
         box-sizing: border-box;
         padding: 30px 20px;
@@ -185,9 +171,8 @@
     .content{
         top:325px;
     }
-    .footer{
+    .delete{
         position: relative;
-        top:324px;
-
+        top:156px;
     }
 }

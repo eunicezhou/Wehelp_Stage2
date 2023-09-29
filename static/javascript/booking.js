@@ -25,16 +25,16 @@ function init(token) {
             console.log(data);
             if(data.data === "尚無任何資料"){
                 let text = document.querySelector("#header--top");
-                user.then(username=>text.innerHTML=`您好，${username}。目前尚無預定行程`)
+                user.then(username=>text.innerHTML=`您好，${username}。待預定行程如下:`)
+                let record = document.createElement("div");
+                record.setAttribute('class','record');
+                record.textContent="目前尚無預定行程";
+                header.appendChild(record);
                 const content = document.querySelector('.content');
                 content.style.display="none";
-                const footer = document.querySelector('.footer');
-                footer.style.flexGrow = 1;
-                footer.style.top = "130px";
             }else{
                 let text = document.querySelector("#header--top");
                 user.then(username=>text.innerHTML=`您好，${username}。待預定行程如下:`)
-
                 let attraction = data['attraction']['name'];
                 
                 const headerRight = document.createElement('div');
@@ -60,7 +60,6 @@ function init(token) {
                 
                 headerAttraction.innerHTML=`<span>台北一日遊 : ${attraction}</span>\
                 <img class="delete" src="./static/image/icon_delete.png">`;
-                let header = document.querySelector(".header");
                 header.appendChild(headerButtom);
                 
                 purchaseInfor.innerHTML=`
