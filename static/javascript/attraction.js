@@ -116,3 +116,71 @@ morning.addEventListener('change',()=>{
 afternoon.addEventListener('change',()=>{
     dollars.textContent="新台幣2500元";
 })
+
+//送出訂購表單
+let date = document.querySelector("#form--bookingdate");
+let dateTime = document.querySelectorAll(".form--bookingtime");
+let chooseDateTime;
+let fee = document.querySelector("#dollars");
+dateTime[0].addEventListener('change',()=>{
+    chooseDateTime = event.target.id;
+    console.log(chooseDateTime);
+    return chooseDateTime;
+})
+dateTime[1].addEventListener('change',()=>{
+    chooseDateTime = event.target.id;
+    console.log(chooseDateTime);
+    return chooseDateTime;
+})
+const submit = document.querySelector(".content__form_btn");
+submit.addEventListener('click',()=>{
+    let localURL = window.location.href;
+    let localURLArray = localURL.split("/");
+    let attractionID = localURLArray.pop();
+    console.log(attractionID);
+    let token = localStorage.getItem('token');
+    if(!token){
+        let targetID = "signin";
+        fakeAlert(targetID);
+        signEvent(targetID);
+    }else{
+        let chooseDate = date.value;
+        if(chooseDateTime==="afternoon"){
+            chooseDateTime = "下午1點到5點";
+        }else if(chooseDateTime==="morning"){
+            chooseDateTime = "早上8點到12點";
+        }else{
+            chooseDateTime = "";
+        }
+        console.log("轉變後",chooseDateTime);
+        let dollars = fee.innerHTML;
+        fetch('/api/booking',{
+            method:"POST",
+            body:JSON.stringify({
+                "attractionId": attractionID,
+                "date": chooseDate,
+                "time": chooseDateTime,
+                "price": dollars
+            }),headers:{
+                "Content-Type":"application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(response=>response.json())
+        .then(object=>{
+            if(object['error']){
+                if(object['message']==="請確認所有欄位皆有點選"){
+                    console.log(object['message']);
+                    let alert = document.querySelector("#alertline");
+                    alert.innerHTML="請確認所有欄位皆有點選";
+                    submit.setAttribute('style','margin-top:15px;');
+                }else{
+                    let alert = document.querySelector("#alertline");
+                    alert.innerHTML="伺服器異常，請重新連線";
+                    submit.setAttribute('style','margin-top:15px;');
+                }
+            }else if(object['ok']){
+                window.location.href = '/booking';
+            }
+        })
+    }
+})

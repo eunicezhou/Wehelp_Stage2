@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam&family=Noto+Sans+TC&display=swap');
+html,body{
+    padding: 0;
+    margin: 0;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 16px;
+    height: 100vh;
+}
+
+/* 設定字型大小及字高 */
+h1{
+    font-size: 28px;
+    font-weight: bold;
+}
+h2{
+    font-size: 30px;
+    font-weight: bold;  
+}
+h3{
+    font-size: 24px;
+}
+button{
+    font-size: 19px;
+    line-height: 16px;
+}
+.bold{
+    font-weight: 700;
+    color:white;
+    margin-bottom: 10px;
+}
+/* 設定navbar */
+.nav{
+    display: flex ;
+    width:100vw;
+    height:54px;
+    justify-content: center;
+    background-color: white;
+    position: fixed;
+    top:0px;
+    z-index: 10;
+    border-bottom: #e8e8e8 1px solid;
+}
+.nav--content{
+    display: inline-flex;
+    width:1200px;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+#title{
+    color:#448899;
+    font-size: larger;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+/*設定彈出視窗*/
+#signin,#signup,#signout{
+    cursor: pointer;
+}
+#signBTN{
+    cursor: pointer;
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+    background-color:#448899;
+    border-radius:6px;
+    margin:0 auto;
+    color:white;
+}
+.signLink{
+    cursor: pointer;
+}
+.signForm{
+    position:fixed;
+    top: 26px;
+    width:340px;
+    margin: 0 calc(50% - 170px);
+    z-index: 20;
+    background-color: white;
+    border-radius:6px;
+    text-align:center;
+}
+.signForm::placeholder{
+    color:#E8E8E8;
+    font-weight:bold;
+}
+#decoratorbar{
+    width:340px;
+    height:10px;
+    border-radius:6px 6px 0 0;
+    background:linear-gradient(to right, #6AB, #448899);
+}
+#closeBTN{
+    position:absolute;
+    top:20px;
+    right:10px;
+}
+#name{
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+}
+#email{
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+}
+#password{
+    width:310px;
+    height:47px;
+    box-sizing:border-box;
+    padding:15px;
+    margin:10px 0 ;
+}
+#shelder{
+    width:100%;
+    height:100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color:#666666;
+    opacity:0.3;
+    z-index:10;
+}
+#alert{
+    visibility: hidden;
+    color:red;
+    margin:10px 0 0 0;
+}
+
+/*設定footer*/
+.footer{
+    height:70px;
+    text-align: center;
+    color: white;
+    font-size:0.8em;
+    padding-top: 50px;
+    background-color: gray;
+    position: relative;
+    top:94px;
+}
+@media(max-width:1200px){
+    .nav{
+        width: 100vw;
+        left:0;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    .nav--content{
+        width: 100%;
+    }
+    .footer{
+        width:100%;
+    }
+}

@@ -197,7 +197,6 @@ signin.addEventListener('click',()=>{
     let targetID = event.target.id;
     fakeAlert(targetID);
     signEvent(targetID);
-    return exist;
 });
 
 //點擊註冊按鈕
@@ -205,8 +204,20 @@ signup.addEventListener('click',()=>{
     let targetID = event.target.id;
     fakeAlert(targetID);
     signEvent(targetID);
-    return exist;
 });
+
+//點擊預定按鈕
+const purchase = document.querySelector("#purchase");
+purchase.addEventListener('click',()=>{
+    let token = localStorage.getItem('token');
+    if(!token){
+        let targetID = "signin";
+        fakeAlert(targetID);
+        signEvent(targetID);
+    }else{
+        window.location.href = '/booking';
+    }
+})
 
 //檢查註冊及登入表單資料
 function getValue(){
@@ -291,6 +302,9 @@ function getValue(){
                     if(data["message"]==="信箱或密碼錯誤"){
                         alertDIV.innerHTML="信箱或密碼錯誤";
                         alertDIV.style.visibility="visible";
+                    }else if(data["message"]==="此信箱未註冊"){
+                        alertDIV.innerHTML="此信箱未註冊";
+                        alertDIV.style.visibility="visible";
                     }else{
                         alertDIV.innerHTML="伺服器錯誤";
                         alertDIV.style.visibility="visible";
@@ -332,6 +346,7 @@ window.addEventListener('load', function() {
                 localStorage.removeItem('token');
                 location.reload();
                 })
+                return username;
             })
         } 
     });

@@ -1,55 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taipei-Attraction</title>
-    <link rel="stylesheet" href="../static/css/index.css">
-</head>
-<body>
-    <section class="nav">
-        <div class="nav--content">
-            <h2 class="bold" id="title">
-                台北一日遊
-            </h2>
-            <div class="nav__div--item">
-                <span>預定行程</span>
-                <span id="sign"><span id="signin">登入</span>/<span id="signup">註冊</span></span>
-            </div>
+{% extends "base.html" %}
+{% block title %}Taipei-Attraction{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="../static/css/base.css">
+<link rel="stylesheet" href="../static/css/index.css">
+{% endblock css %}
+{% block content %}
+<section class="header">
+    <div id="header--text">
+        <div id="header__text">
+            <h1 class="bold" id="header--title1">輕鬆享受台北一日悠閒</h1>
+            <div class="bold" id="header--title1">探索每個角落，體驗城市的深度旅遊行程</div>
         </div>
-    </section>
-    <section class="header">
-        <div id="header--text">
-            <div id="header__text">
-                <h1 class="bold" id="header--title1">輕鬆享受台北一日悠閒</h1>
-                <div class="bold" id="header--title1">探索每個角落，體驗城市的深度旅遊行程</div>
-            </div>
-            <div id="header--input">
-                <input type="text" id="header__input" placeholder="輸入景點名稱查詢">
-                <button id="header__btn" class="bold">
-                    <img src="../static/image/icon_search.png">
-                </button> 
-            </div>
+        <div id="header--input">
+            <input type="text" id="header__input" placeholder="輸入景點名稱查詢">
+            <button id="header__btn" class="bold">
+                <img src="../static/image/icon_search.png">
+            </button> 
         </div>
-    </section>
-    <section class="container">
-        <div id="container__div_nav--head">
-            <div id="container__div--leftbar">
-                <img src="../static/image/left.png">
-            </div>
-            <div id="container__div_nav--content">
-
-            </div>
-            <div id="container__div--rightbar">
-                <img src="../static/image/right.png">
-            </div>
+    </div>
+</section>
+<section class="container">
+    <div id="container__div_nav--head">
+        <div id="container__div--leftbar">
+            <img src="../static/image/left.png">
         </div>
-        <div id="cintainer__div--content">
+        <div id="container__div_nav--content">
 
         </div>
-    </section>
-    <section class="footer">copyright &copy 2023 台北一日遊</section>
-    <script src="../static/javascript/script.js"></script>
-    <script src="../static/javascript/form.js"></script>
-</body>
-</html>
+        <div id="container__div--rightbar">
+            <img src="../static/image/right.png">
+        </div>
+    </div>
+    <div id="cintainer__div--content">
+
+    </div>
+</section>
+{% endblock content %}
+{% block script %}
+<script src="../static/javascript/script.js"></script>
+<script src="../static/javascript/form.js"></script>
+{% endblock script %}

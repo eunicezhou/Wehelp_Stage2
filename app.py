@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 app=Flask(__name__)
+app.secret_key = 'your_secret_key'
 #test
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
@@ -45,13 +46,14 @@ def connect(execute_str,execute_argument=None):
 #==================================================================================
 #================api===============================================================
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+
 @app.route("/api/attractions")
 def apiattraction():
 	page = request.args.get("page")
 	keyword = request.args.get("keyword")
 	# print(keyword)
 	if page == None:
-		results_dict = {"error":True,"message":"請輸入page"}
+		results_dict = {"error": True, "message": "請輸入page"}
 		finalresult = results_convert(results_dict)
 		return finalresult,500
 	else:
@@ -60,16 +62,15 @@ def apiattraction():
 		except ValueError:
 			results_dict = {"error": True, "message": "page格式為數字"}
 			finalresult = results_convert(results_dict)
-			return finalresult,500
-	execute_argument = page*12
+			return finalresult, 500
+	execute_argument = page * 12
 	if keyword == None:
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng \
 			FROM attraction LIMIT 12 OFFSET %s"
-		print(query)
 		nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 		 LIMIT 1 OFFSET %s"
-		page_data = connect(query,(execute_argument,))
-		nextPage_data = connect(nextPage,(execute_argument+12,))
+		page_data = connect(query, (execute_argument,))
+		nextPage_data = connect(nextPage, (execute_argument+12,))
 		if nextPage_data == []:
 			nextPageValue = None
 		else:
@@ -90,7 +91,7 @@ def apiattraction():
 			nextPageValue = None
 		else:
 			nextPageValue = page + 1
-	# print(page_data)
+
 	results = []
 	for item in page_data:
 		id = item[0]
@@ -107,28 +108,28 @@ def apiattraction():
 		address = item[6]
 		lat = item[7]
 		lng = item[8]
-		img_list = connect("SELECT image FROM img WHERE attraction_id = %s",[id])
+		img_list = connect("SELECT image FROM img WHERE attraction_id = %s", [id])
 		new_img_list = []
 		for img in img_list:
 			new_img_list.append(img[0])
-		result = {"id":id,"name":attraction,
-					"category": category,"description": introduction,"address": address,
-					"transport": transportation,"mrt": mrt,"lat":lat ,"lng":lng,"image":new_img_list}
+		result = {"id": id, "name": attraction,
+					"category": category, "description": introduction, "address": address,
+					"transport": transportation, "mrt": mrt, "lat": lat , "lng": lng, "image": new_img_list}
 		results.append(result)
-		results_dict = {"nextPage":nextPageValue,"data":results}
+		results_dict = {"nextPage": nextPageValue, "data": results}
 		finalresult = results_convert(results_dict)
 	return finalresult
 
 @app.route("/api/attractions/<int:attractionID>")
 def get_attraction(attractionID):
 	if type(attractionID) != int:
-		results_dict = {"error":True,"message":"請輸入正確的id數值"}
+		results_dict = {"error": True, "message": "請輸入正確的id數值"}
 		finalresult = results_convert(results_dict)
-		return finalresult,400
+		return finalresult, 400
 	elif attractionID == None:
-		results_dict = {"error":True,"message":"請一個數值"}
+		results_dict = {"error": True, "message": "請一個數值"}
 		finalresult = results_convert(results_dict)
-		return finalresult,500
+		return finalresult, 500
 	else:
 		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
 			WHERE id = %s"
@@ -197,7 +198,6 @@ def memberSignup():
 			# return finalresult
 		except Exception as err:
 			result = {"error": True,"message": err}
-			print(result)
 			finalresult = results_convert(result)
 			status = 500
 	return finalresult,status
@@ -222,9 +222,14 @@ def login():
 				encode_token = jwt.encode(filedict, 'private_key',algorithm='HS256')
 				return jsonify({"token":encode_token})
 			else:
-				result = {"error": True,"message": "信箱或密碼錯誤"}
-				finalresult = results_convert(result)
-				return finalresult,400
+				if email not in memberInfor[0]:
+					result = {"error": True,"message": "此信箱未註冊"}
+					finalresult = results_convert(result)
+					return finalresult,400
+				elif email in memberInfor[0] or password in memberInfor[1]:
+					result = {"error": True,"message": "信箱或密碼錯誤"}
+					finalresult = results_convert(result)
+					return finalresult,400
 		except Exception as err:
 			result = {"error": True,"message": err}
 			finalresult = results_convert(result)
@@ -235,8 +240,6 @@ def login():
 			if token:
 				decode_token = token.split('Bearer ')
 				information = jwt.decode(decode_token[1], 'private_key', algorithms=['HS256'])
-				print(information.pop("exp"))
-				print(information)
 				return jsonify({"data":information})
 			else:
 				return redirect("/")
@@ -244,7 +247,81 @@ def login():
 			result = {"error": True,"message": err}
 			finalresult = results_convert(result)
 			return finalresult,500
-			
+
+#預定行程api
+@app.route("/api/booking",methods=["POST","GET","DELETE"])
+def bookingAPI():
+	if request.method == "POST":
+		try:
+			data = request.get_json()
+			attractionID = int(data['attractionId'])
+			attractionInfor = connect("SELECT attraction,address FROM attraction WHERE id = %s",(attractionID,))
+			attractionName = attractionInfor[0][0]
+			attractionAddress =  attractionInfor[0][1]
+			attractionImage = connect("SELECT image FROM img WHERE attraction_id=%s LIMIT 1",(attractionID,))
+			date = data['date']
+			time = data['time']
+			price = data['price']
+			token = request.headers.get('Authorization')
+			if date and time and price:
+				purchase = {"attraction": {
+						"id": attractionID,
+						"name": attractionName,
+						"address": attractionAddress,
+						"image": attractionImage
+						},
+						"date": date,
+						"time": time,
+						"price": price}
+				session["data"] = purchase
+				result = {"ok":True}
+				finalresult = results_convert(result)
+				return finalresult
+			elif not token:
+				result = {"error": True,"message": "請確認登入帳戶"}
+				finalresult = results_convert(result)
+				return finalresult,403
+			else:
+				result = {"error": True,"message": "請確認所有欄位皆有點選"}
+				finalresult = results_convert(result)
+				return finalresult,400
+		except Exception as err:
+			result = {"error": True,"message": err}
+			finalresult = results_convert(result)
+			return finalresult,500
+	elif request.method == "GET":
+		try:
+			if session == {}:
+				result = {"data":"尚無任何資料"}
+				finalresult = results_convert(result)
+				return finalresult
+			else:
+				data=session["data"]
+				return results_convert(data)
+		except Exception as err:
+			result = {"error": True,"message": err}
+			finalresult = results_convert(result)
+			return finalresult,500
+	elif request.method == "DELETE":
+		try:
+			token = request.headers.get('Authorization')
+			if token == None:
+				result = {"error": True,"message": "使用者未登入"}
+				finalresult = results_convert(result)
+				return finalresult,400
+			elif token:
+				session.clear()
+				result = {"ok":True}
+				finalresult = results_convert(result)
+				return finalresult
+		except Exception as err:
+			result = {"error": True,"message": err}
+			finalresult = results_convert(result)
+			return finalresult,500
+		
+	
+
+	
 #=================================================================================
 @app.route("/")
 def index():
@@ -252,9 +329,9 @@ def index():
 @app.route("/attraction/<id>")
 def attraction(id):
 	return render_template("attraction.html")
-# @app.route("/booking")
-# def booking():
-# 	return render_template("booking.html")
+@app.route("/booking")
+def booking():
+	return render_template("booking.html")
 # @app.route("/thankyou")
 # def thankyou():
 # 	return render_template("thankyou.html")

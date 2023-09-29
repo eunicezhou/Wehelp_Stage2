@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Booking{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="../static/css/base.css">
+<link rel="stylesheet" href="../static/css/booking.css">
+{% endblock css %}
+{% block content %}
+<section class="header">
+    <div id="header--top" class="bold"></div>
+</section>
+<section class="content">
+    <div class="main"></div>
+    <div class="content__div">
+        <div class="bold text">您的聯絡資訊</div>
+        <label for="subscribeName" class="text normalsize">聯絡姓名 :
+            <input type="text" placeholder="{{username}}" name="subscribename" id="subscribename">
+        </label>
+        <label for="contactMail" class="text normalsize">聯絡信箱 :
+            <input type="email" placeholder="{{email}}" name="contactMail" id="contactMail">
+        </label>
+        <label for="contactPhone" class="text normalsize">聯絡姓名 :
+            <input type="number" name="contactPhone" id="contactPhone">
+        </label>
+        <div class="bold" style="color:#666666;">
+            請保持手機暢通，準時到達。導覽人員將用手機與您聯繫，務必留下正確的聯絡方式
+        </div>
+    </div>
+    <div class="main"></div>
+    <div class="content__div">
+        <div class="bold text">信用卡付款資訊</div>
+        <label for="creditCard" class="text normalsize">卡片號碼 :
+            <input type="password" placeholder="**** **** **** ****" name="creditCard" id="creditCard">
+        </label>
+        <label for="expDate" class="text normalsize">過期日期 :
+            <input type="text" id="expDate" name="expDate" placeholder="MM/YY">
+        </label>
+        <label for="contactPhone" class="text normalsize">驗證密碼 :
+            <input type="number" placeholder="CVV" name="contactPhone" id="contactPhone">
+        </label>
+    </div>
+    <div class="main"></div>
+    <div class="content__div left">
+        <div class="summary" style="height: 100px;">
+            <div class="bold">總價:<span id="total"></span></div>
+            <div id="fakeButton">確認訂購並付款</div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block script %}
+<script src="../static/javascript/form.js"></script>
+<script src="../static/javascript/booking.js"></script>
+{% endblock script %}
