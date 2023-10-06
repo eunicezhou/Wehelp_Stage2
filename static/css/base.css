@@ -142,7 +142,8 @@ button{
 
 /*設定footer*/
 .footer{
-    height:70px;
+    box-sizing: border-box;
+    height:120px;
     text-align: center;
     color: white;
     font-size:0.8em;

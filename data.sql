@@ -114,9 +114,8 @@ CREATE TABLE `member` (
   `name` varchar(10) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +124,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'周紫珍','zizhen0826@gmail.com','password'),(2,'test','testtest@gmail.com','8888'),(3,'nick','nick858585@gmail.com','nik'),(4,'88888','88888@gmail.com','8888'),(5,'nicknick','niknik@gmail.com','nik');
+INSERT INTO `member` VALUES (1,'周紫珍','zizhen0826@gmail.com','password'),(2,'test','testtest@gmail.com','8888'),(3,'nick','nick858585@gmail.com','nik');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,39 +151,6 @@ LOCK TABLES `mrt` WRITE;
 INSERT INTO `mrt` VALUES (1,'新北投'),(2,'雙連'),(3,'士林'),(4,'劍潭'),(5,'唭哩岸'),(6,'大安森林公園'),(7,'象山'),(8,'龍山寺'),(9,'行天宮'),(10,'中正紀念堂'),(11,'市政府'),(12,'動物園'),(13,'關渡'),(14,'忠孝新生'),(15,'臺大醫院'),(16,'台北101／世貿'),(17,'松江南京'),(18,'中山'),(19,'國父紀念館'),(20,'文德'),(21,'圓山'),(22,'大湖公園'),(23,'大直'),(24,'石牌'),(25,'忠義'),(26,'西門'),(27,'松山'),(28,'北投'),(29,'葫洲'),(30,'木柵'),(31,'芝山'),(32,'公館');
 /*!40000 ALTER TABLE `mrt` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `record`
---
-
-DROP TABLE IF EXISTS `record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `record` (
-  `order_id` int NOT NULL AUTO_INCREMENT,
-  `order_number` varchar(50) DEFAULT NULL,
-  `member_id` int DEFAULT NULL,
-  `attraction_id` int DEFAULT NULL,
-  `price` int DEFAULT NULL,
-  `contactName` varchar(10) DEFAULT NULL,
-  `contactEmail` varchar(255) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `date` varchar(20) DEFAULT NULL,
-  `time` varchar(50) DEFAULT NULL,
-  `status` varchar(10) DEFAULT '未繳款',
-  PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `record`
---
-
-LOCK TABLES `record` WRITE;
-/*!40000 ALTER TABLE `record` DISABLE KEYS */;
-INSERT INTO `record` VALUES (1,'42a3a43d-68ca-46ac-940b-1fc8db7d0571',1,2,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(2,'f80085d5-b71c-4fae-88cc-9416d7c8a161',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(3,'657f6086-e5b6-4cec-962a-5c93bb593eb0',1,2,2500,'周紫珍','eunice3157538@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(4,'b05d0d30-007e-4be9-814a-235bd5a21a46',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-18','下午1點到5點','已繳款'),(5,'80236043-cf7e-4d7e-8288-5a0484233b18',1,19,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(6,'79dbdee3-912a-4b31-9d82-28eec356ac90',1,33,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款');
-/*!40000 ALTER TABLE `record` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -195,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-06 21:17:19
+-- Dump completed on 2023-09-23 10:38:05
