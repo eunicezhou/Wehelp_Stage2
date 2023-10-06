@@ -6,6 +6,9 @@ import json
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
+import uuid
+import pandas as pd
+import requests
 
 app=Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -51,7 +54,6 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 def apiattraction():
 	page = request.args.get("page")
 	keyword = request.args.get("keyword")
-	# print(keyword)
 	if page == None:
 		results_dict = {"error": True, "message": "請輸入page"}
 		finalresult = results_convert(results_dict)
@@ -131,7 +133,8 @@ def get_attraction(attractionID):
 		finalresult = results_convert(results_dict)
 		return finalresult, 500
 	else:
-		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction \
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng \
+			FROM attraction \
 			WHERE id = %s"
 		page_data = connect(query,(attractionID,))
 		results = []
@@ -319,9 +322,130 @@ def bookingAPI():
 			finalresult = results_convert(result)
 			return finalresult,500
 		
-	
+#購買行程
+@app.route("/api/orders",methods=["POST"])
+def pay():
+	try:
+		token = request.headers.get('Authorization')
+		if token == None:
+			result = {"error": True,"message": "使用者未登入"}
+			finalresult = results_convert(result)
+			return finalresult,403
+		elif token:
+			decode_token = token.split('Bearer ')
+			information = jwt.decode(decode_token[1], 'private_key', algorithms=['HS256'])
+			memberID = information['id']
+			data = request.get_json()
+			prime = data['prime']
+			attraction_id = data['order']['trip']['attraction']['id']
+			attraction = data['order']['trip']['attraction']['name']
+			contactName = data['order']['contact']['name']
+			contactEmail = data['order']['contact']['email']
+			contactPhone = data['order']['contact']['phone']
+			price = int(data['order']['price'])
+			date = data['order']['trip']['date']
+			time = data['order']['trip']['time']
+			setup = pd.DataFrame([{
+				"order_number":uuid.uuid4()}])
+			orderID = str(setup['order_number']).split('\n')[0].lstrip('0').lstrip(' ')
+			connect("INSERT INTO record(order_number, member_id, attraction_id, \
+			price, contactName, contactEmail, phone, date, time) \
+			VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", 
+			(orderID,memberID,attraction_id,price,contactName,contactEmail,contactPhone,date,time))
+			
+			#向tappay傳送請求
+			tappay_api_url = 'https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime'
+			headers = {
+				'Content-Type': 'application/json',
+				'x-api-key': "partner_9z8gPYEOG2FqIqzIYYguMCVFJBZazxlTppKYuP9oFWSEAM7DKUcewkNC"
+			}
 
-	
+			# 發送 POST 請求到 Tappay API
+			tappay_api_data = {
+				"prime": prime,
+				"partner_key": "partner_9z8gPYEOG2FqIqzIYYguMCVFJBZazxlTppKYuP9oFWSEAM7DKUcewkNC",
+				"merchant_id": "eunicezhou_CTBC",
+				"details": attraction,
+				"amount": price,
+				"cardholder": {
+					"phone_number": contactPhone,
+					"name": contactName,
+					"email": contactEmail,
+				},
+				"order_number": orderID
+			}
+			response = requests.post(tappay_api_url, json=tappay_api_data, headers=headers)
+			responseJson = response.json()
+			status = responseJson['status']
+			message = responseJson['msg']
+			if status!= 0:
+				responseData = {
+					"number":orderID,
+					"error": True,
+					"message": "訂單建立失敗"
+					}
+				finalresult = results_convert(responseData)
+				return finalresult,400
+			else:
+				connect("UPDATE record SET status='已繳款' WHERE order_number=%s",(orderID,))
+				responseData = {
+					"data":{
+						"number":orderID,
+						"payment":{	
+							"status": status,
+							"message": message
+						}
+					}
+				}
+				finalresult = results_convert(responseData)
+				return finalresult
+	except Exception as err:
+		responseData = {
+			"error": True,
+			"message": err
+			}
+		finalresult = results_convert(responseData)
+		return finalresult,500
+
+@app.route("/api/orders/<string:orderID>",methods=["GET"])
+def getThankyou(orderID):
+	token = request.headers.get('Authorization')
+	if token == None:
+		result = {"error": True,"message": "使用者未登入"}
+		finalresult = results_convert(result)
+		return finalresult,403
+	else:
+		session.clear()
+		order = connect("SELECT order_number From record WHERE order_number=%s",(orderID,))
+		orderMember = connect("SELECT member_id From record WHERE order_number=%s",(orderID,))
+		if order:
+			orderData = connect("SELECT order_number, member_id, attraction_id, \
+				price, contactName, contactEmail, phone, date, time, status From record WHERE member_id=%s",(orderMember[0][0],))
+			orderDataDict = {}
+			id=0
+			for data in orderData:
+				orderDataDict[f"data{id}"] = {
+					"number": data[0],
+					"price": data[3],
+					"trip": {
+					"attraction": {
+						"id": data[2],
+						"name": connect("SELECT attraction FROM attraction WHERE id=%s",(data[2],))[0][0],
+						"address": connect("SELECT address FROM attraction WHERE id=%s",(data[2],))[0][0],
+						"image": connect("SELECT image FROM img WHERE attraction_id=%s LIMIT 1",(data[2],))[0][0]
+					},
+					"date": data[7],
+					"time": data[8]
+					},
+					"contact": {
+					"name": data[4],
+					"email": data[5],
+					"phone": data[6]
+					},
+					"status":data[9]
+				}
+				id+=1
+	return jsonify(orderDataDict)
 #=================================================================================
 @app.route("/")
 def index():
@@ -332,8 +456,8 @@ def attraction(id):
 @app.route("/booking")
 def booking():
 	return render_template("booking.html")
-# @app.route("/thankyou")
-# def thankyou():
-# 	return render_template("thankyou.html")
-# print("test")
+@app.route("/thankyou")
+def thankyou():
+	return render_template("thankyou.html")
+
 app.run(debug=True, host="0.0.0.0", port=3000)

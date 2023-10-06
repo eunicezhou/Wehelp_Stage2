@@ -5,7 +5,7 @@ let keyword;
 //創建mrtlist
 const mrtDiv = document.createElement("div");
 async function mrtlist(){
-    let response = await fetch('http://52.198.121.57:3000/api/mrts');
+    let response = await fetch('/api/mrts');
     let data = await response.json(); //這邊所得到的data是['新北投', '劍潭', '關渡',...
     const mrtdata = data.data
     let i;

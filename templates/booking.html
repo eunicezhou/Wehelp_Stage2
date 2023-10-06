@@ -18,8 +18,8 @@
         <label for="contactMail" class="text normalsize">聯絡信箱 :
             <input type="email" placeholder="{{email}}" name="contactMail" id="contactMail">
         </label>
-        <label for="contactPhone" class="text normalsize">聯絡姓名 :
-            <input type="number" name="contactPhone" id="contactPhone">
+        <label for="contactPhone" class="text normalsize">聯絡電話 :
+            <input type="tel" name="contactPhone" id="contactPhone">
         </label>
         <div class="bold" style="color:#666666;">
             請保持手機暢通，準時到達。導覽人員將用手機與您聯繫，務必留下正確的聯絡方式
@@ -28,14 +28,14 @@
     <div class="main"></div>
     <div class="content__div">
         <div class="bold text">信用卡付款資訊</div>
-        <label for="creditCard" class="text normalsize">卡片號碼 :
-            <input type="password" placeholder="**** **** **** ****" name="creditCard" id="creditCard">
+        <label for="creditCard" class="text normalsize tpfield">卡片號碼 :
+            <div id="card-number"></div>
         </label>
-        <label for="expDate" class="text normalsize">過期日期 :
-            <input type="text" id="expDate" name="expDate" placeholder="MM/YY">
+        <label for="expDate" class="text normalsize tpfield">到期日期 :
+            <div id="card-expiration-date"></div>
         </label>
-        <label for="contactPhone" class="text normalsize">驗證密碼 :
-            <input type="number" placeholder="CVV" name="contactPhone" id="contactPhone">
+        <label for="ccv" class="text normalsize tpfield">驗證密碼 :
+            <div id="card-ccv"></div>
         </label>
     </div>
     <div class="main"></div>
@@ -49,6 +49,6 @@
 {% endblock content %}
 
 {% block script %}
-<script src="../static/javascript/form.js"></script>
+<script src="https://js.tappaysdk.com/sdk/tpdirect/v5.17.0"></script>
 <script src="../static/javascript/booking.js"></script>
 {% endblock script %}
