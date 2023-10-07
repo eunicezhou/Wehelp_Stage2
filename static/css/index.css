@@ -149,15 +149,6 @@
     color:#757575
 }
 
-.footer{
-    height:70px;
-    text-align: center;
-    color: white;
-    font-size:0.8em;
-    padding-top: 50px;
-    background-color: gray;
-}
-
 @media(max-width:1200px){
     #header--text{
         margin-left: 10px;
@@ -170,6 +161,7 @@
         width:100%;
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 60px;
     }
     #container__div_nav--head{
         width: 100%;

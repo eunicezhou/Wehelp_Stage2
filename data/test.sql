@@ -173,7 +173,7 @@ CREATE TABLE `record` (
   `time` varchar(50) DEFAULT NULL,
   `status` varchar(10) DEFAULT '未繳款',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,7 +182,7 @@ CREATE TABLE `record` (
 
 LOCK TABLES `record` WRITE;
 /*!40000 ALTER TABLE `record` DISABLE KEYS */;
-INSERT INTO `record` VALUES (1,'42a3a43d-68ca-46ac-940b-1fc8db7d0571',1,2,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(2,'f80085d5-b71c-4fae-88cc-9416d7c8a161',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(3,'657f6086-e5b6-4cec-962a-5c93bb593eb0',1,2,2500,'周紫珍','eunice3157538@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(4,'b05d0d30-007e-4be9-814a-235bd5a21a46',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-18','下午1點到5點','已繳款'),(5,'80236043-cf7e-4d7e-8288-5a0484233b18',1,19,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(6,'79dbdee3-912a-4b31-9d82-28eec356ac90',1,33,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(7,'3e4f2f8c-85ab-4c26-9a16-430f5b3eb5be',1,1,2500,'林韋杰','nick@gmail.com','0978888888','2023-10-18','下午1點到5點','已繳款'),(8,'a803154f-c7f7-4676-aa59-a2aa3bc09b9a',2,4,2000,'888888','testtest@gmail.com','09888888','2023-11-02','早上8點到12點','已繳款'),(9,'52b76717-89a1-47dd-b754-e5d21bee86d6',2,34,2000,'testtest','testtest@gmail.com','0988888888','2023-12-20','早上8點到12點','已繳款'),(10,'b58f9f65-2318-4141-b13e-d59a1a844ea4',2,15,2000,'test','testest@gmail.com','0988888888','2023-10-30','早上8點到12點','已繳款'),(11,'6ec9594f-d12f-4bb1-b746-5a4f91af90db',2,15,2000,'test','testest@gmail.com','0988888888','2023-10-30','早上8點到12點','已繳款'),(12,'8c0be7c6-d7f2-4a84-a9c6-00fede08134b',2,3,2000,'test','testtest@gmail.com','0988888888','2023-11-01','早上8點到12點','已繳款'),(13,'2e74f656-9c46-484b-a0d5-a0d18d4bbbdc',2,3,2000,'test','testtest@gmail.com','0988888888','2023-11-01','早上8點到12點','已繳款');
+INSERT INTO `record` VALUES (1,'42a3a43d-68ca-46ac-940b-1fc8db7d0571',1,2,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(2,'f80085d5-b71c-4fae-88cc-9416d7c8a161',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(3,'657f6086-e5b6-4cec-962a-5c93bb593eb0',1,2,2500,'周紫珍','eunice3157538@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(4,'b05d0d30-007e-4be9-814a-235bd5a21a46',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-18','下午1點到5點','已繳款'),(5,'80236043-cf7e-4d7e-8288-5a0484233b18',1,19,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(6,'79dbdee3-912a-4b31-9d82-28eec356ac90',1,33,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款');
 /*!40000 ALTER TABLE `record` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -195,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-07  0:30:18
+-- Dump completed on 2023-10-06 21:10:00

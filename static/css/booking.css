@@ -76,7 +76,7 @@
     grid-gap:15px;
     margin:30px auto 30px;
 }
-.content__div input{
+.content__div input,#card-number,#card-expiration-date,#card-ccv{
     width:200px;
     height:38px;
     border:1px solid #e8e8e8;
@@ -84,6 +84,8 @@
     box-sizing: border-box;
     color:#757575;
     padding:10px;
+    display: inline-block;
+    vertical-align:middle ;
 }
 .content__div ::-webkit-input-placeholder{
     color:#757575;
