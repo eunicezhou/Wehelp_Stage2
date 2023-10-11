@@ -112,6 +112,42 @@ for item in actual_data:
                     VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(name_str,transportation_str,description_str,address_str,mrt_str,category_str,lat,lng))
     connection.commit()
 ```
+上面的步驟是將所有資料都放到table中，下面為了節省MySql的table空間，會對資料進行資料正規化，將有重複的資料拉出來另外建立索引table
+Step 5 建立資料正規化
+```mysql
+#建立mrt table
+CREATE TABLE mrt(
+mrtID INT PRIMARY KEY AUTO_INCREMENT,
+mrt VARCHAR(10) NOT NULL
+);
+#將attraction table中的mrt_id欄位的資料進行型態轉換
+ALTER TABLE attraction MODIFY mrt_id INT;
+#對attraction中的mrt_id建立外鍵
+ALTER TABLE attraction ADD FOREIGN KEY(mrt_id)REFERENCES mrt(mrtID);
+
+#建立category表格
+CREATE TABLE category(
+categoryID INT PRIMARY KEY AUTO_INCREMENT,
+category VARCHAR(10) NOT NULL
+);
+#將attraction table中的category_id欄位的資料進行型態轉換
+ALTER TABLE attraction MODIFY category_id INT;
+#對attraction中的category_id建立外鍵
+ALTER TABLE attraction ADD FOREIGN KEY(category_id) REFERENCES category(categoryID);
+
+#建立img table
+CREATE TABLE img(
+id INT PRIMARY KEY AUTO_INCREMENT,
+attraction_id INT,
+image TEXT
+);
+#對img table新增索引attraction_id
+ALTER TABLE img ADD INDEX (attraction_id);
+#對attraction中的id建立外鍵
+ALTER TABLE attraction ADD FOREIGN KEY(id) REFERENCES img(attraction_id);
+```
+Step 6 
+
 ## Part 1 - 2：開發旅遊景點 API
 請仔細的按照 API 文件「旅遊景點」、「捷運站」部份的指⽰，完成三個 API。 景點的圖片
 網址以及捷運站名稱列表皆為陣列格式，可能包含⼀到多筆資料。
