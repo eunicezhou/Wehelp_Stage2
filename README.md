@@ -15,7 +15,7 @@ http://52.198.121.57:3000
 
 # 開始製作專案:
 ## Part 1 - 1：建立存放景點資料的資料庫
-#### 1. 獨立寫一支python檔案，將景點資訊建立到MySQL中
+#### 獨立寫一支python檔案，將景點資訊建立到MySQL中
 
 在我們的專案中有⼀個 data 資料夾，裡⾯存放了⼀個 taipei-attractions.json 檔案，包含所有
 景點的相關資料。請在 MySQL 資料庫中，設計你的資料表，在 data 資料夾下，額外寫⼀隻
@@ -243,5 +243,57 @@ connection.commit()
 ## Part 1 - 2：開發旅遊景點 API
 請仔細的按照 API 文件「旅遊景點」、「捷運站」部份的指⽰，完成三個 API。 景點的圖片
 網址以及捷運站名稱列表皆為陣列格式，可能包含⼀到多筆資料。
+#### 建立app.py，作為所有後端路徑的接口檔案
+
+```python
+#載入所有使用到的模組
+from flask import *
+import mysql.connector
+from mysql.connector import pooling
+from flask_cors import CORS
+import json
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
+import uuid
+import pandas as pd
+import requests
+
+#初始化flask這個模組，並將它儲存在app這個變數中
+#__name__ 是 Python 中的特殊變數，代表目前模組的名稱。在這個情況下，它代表了這個應用程式所在的模組（也就是你的 Python 檔案）
+app=Flask(__name__)
+#設定session的secret-key
+app.secret_key = 'your_secret_key'
+#將資料轉為JSON格式
+def results_convert(result):
+	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
+	return response
+#串聯資料庫
+con ={
+    'user':'root',
+    'password':'password',
+    'host':'localhost',
+    'database':'stage2',
+}
+# 建立連接池
+connection_pool = pooling.MySQLConnectionPool(pool_name='taipei-travel',pool_size=5,**con)
+# 從連接池中取得連接
+def connect(execute_str,execute_argument=None):
+	connection = connection_pool.get_connection()
+	cursor = connection.cursor()
+	try:
+		cursor.execute("USE stage2")
+		cursor.execute(execute_str,execute_argument)
+		result = cursor.fetchall()
+		connection.commit()
+	except Exception as err:
+		print(err)
+		result = None
+	finally:
+		cursor.close()
+		connection.close()
+	return result
+```
+
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
