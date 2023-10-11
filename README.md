@@ -55,7 +55,63 @@ with open('taipei-attractions.json','r',encoding='utf-8') as attract_file:
     data = json.load(attract_file)
     actual_data = data['result']['results']
 ```
+Step 3 在MySQL中建立藥使用的database和tables
+```mysql
+//建立database
+CREATE DATABASE stage2;
+USE stage2;
 
+//建立attraction table
+CREATE TABLE attraction(
+id INT PRIMARY KEY AUTO_INCREMENT,
+attraction VARCHAR(25) NOT NULL,
+transportation TEXT,
+introduction TEXT,
+image TEXT,
+address TEXT,
+lat VARCHAR(25),
+lng VARCHAR(25),
+mrt_id VARCHAR(10),
+category_id VARCHAR(10)
+);
+```
+Step 4 將資料放到attraction table中
+```python
+for item in actual_data:
+  file = item['file']
+  file_str = ''.join(file)
+  file_list = file_str.split('http')
+  picture = []
+  for file_item in file_list:
+    if "jpg" in file_item :
+      picture.append('http' + file_item)
+    elif "png" in file_item :
+       picture.append('http' + file_item)
+    else:
+       pass
+    name = item['name']
+    transportation = item['direction']
+    category = item['CAT']
+    description = item['description']
+    address = item['address']
+    mrt = item['MRT']
+    name_str = ''.join(name)
+    transportation_str = ''.join(transportation)
+    category_str = ''.join(category)
+    description_str = ''.join(description)
+    address_str = ''.join(address)
+    lat = item['latitude']
+    lng = item['longitude']
+    if mrt == None:
+       mrt_str = None
+       print(mrt_str)
+    else:
+       mrt_str = ''.join(mrt)
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("INSERT INTO attraction(attraction,transportation,introduction,address,mrt_id,category_id,lat,lng) \
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(name_str,transportation_str,description_str,address_str,mrt_str,category_str,lat,lng))
+    connection.commit()
+```
 ## Part 1 - 2：開發旅遊景點 API
 請仔細的按照 API 文件「旅遊景點」、「捷運站」部份的指⽰，完成三個 API。 景點的圖片
 網址以及捷運站名稱列表皆為陣列格式，可能包含⼀到多筆資料。
