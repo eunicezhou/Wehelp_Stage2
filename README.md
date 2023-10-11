@@ -17,6 +17,12 @@ http://52.198.121.57:3000
 ## Part 1 - 1：建立存放景點資料的資料庫
 #### 1. 獨立寫一支python檔案，將景點資訊建立到MySQL中
 
+在我們的專案中有⼀個 data 資料夾，裡⾯存放了⼀個 taipei-attractions.json 檔案，包含所有
+景點的相關資料。請在 MySQL 資料庫中，設計你的資料表，在 data 資料夾下，額外寫⼀隻
+獨立的 Python 程式統⼀將景點資料存放到資料庫中。
+請特別注意景點圖片的處理，我們會過濾資料中，不是 JPG 或 PNG 的檔案， 景點的每張圖
+片網址 都必須被想辦法儲存在資料庫中。
+
 Step 1 建立連接池，並從連接池中取得連結
 ```python
 #載入connector模組
@@ -37,11 +43,19 @@ cursor = connection.cursor()
 cursor.execute("USE stage2")
 connection.commit()
 ```
-在我們的專案中有⼀個 data 資料夾，裡⾯存放了⼀個 taipei-attractions.json 檔案，包含所有
-景點的相關資料。請在 MySQL 資料庫中，設計你的資料表，在 data 資料夾下，額外寫⼀隻
-獨立的 Python 程式統⼀將景點資料存放到資料庫中。
-請特別注意景點圖片的處理，我們會過濾資料中，不是 JPG 或 PNG 的檔案， 景點的每張圖
-片網址 都必須被想辦法儲存在資料庫中。
+Step 2 讀取並開啟 taipei-attractions.json 這個檔案
+```python
+#載入JSON模組
+import json
+#開啟taipei-attractions.json檔案並進行資料讀取
+#with open負責開啟檔案，執行相關的操作，並在執行完後自動關閉檔案，這樣可以避免忘記手動關閉檔案而導致的問題
+#'r': 以讀取模式打開檔案
+#encoding='utf-8': 指定檔案的編碼方式為 UTF-8
+with open('taipei-attractions.json','r',encoding='utf-8') as attract_file:
+    data = json.load(attract_file)
+    actual_data = data['result']['results']
+```
+
 ## Part 1 - 2：開發旅遊景點 API
 請仔細的按照 API 文件「旅遊景點」、「捷運站」部份的指⽰，完成三個 API。 景點的圖片
 網址以及捷運站名稱列表皆為陣列格式，可能包含⼀到多筆資料。
