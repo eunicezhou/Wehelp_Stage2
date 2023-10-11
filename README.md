@@ -243,7 +243,7 @@ connection.commit()
 ## Part 1 - 2：開發旅遊景點 API
 請仔細的按照 API 文件「旅遊景點」、「捷運站」部份的指⽰，完成三個 API。 景點的圖片
 網址以及捷運站名稱列表皆為陣列格式，可能包含⼀到多筆資料。
-#### 建立app.py，作為所有後端路徑的接口檔案
+#### 1. 建立app.py，作為所有後端路徑的接口檔案
 
 ```python
 #載入所有使用到的模組
@@ -262,12 +262,15 @@ import requests
 #初始化flask這個模組，並將它儲存在app這個變數中
 #__name__ 是 Python 中的特殊變數，代表目前模組的名稱。在這個情況下，它代表了這個應用程式所在的模組（也就是你的 Python 檔案）
 app=Flask(__name__)
+
 #設定session的secret-key
 app.secret_key = 'your_secret_key'
+
 #將資料轉為JSON格式
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
 	return response
+
 #串聯資料庫
 con ={
     'user':'root',
@@ -294,6 +297,24 @@ def connect(execute_str,execute_argument=None):
 		connection.close()
 	return result
 ```
+#### 2. 依照api功能建立blueprint檔案
+1. api_attractions.py
+```
+#先載入會使用到的模組、session_key、資料庫等等
+#建立blueprint物件
+attractions_blueprint = Blueprint('api_orders',__name__,template_folder= 'api')
 
+#建立路徑
+@orders_blueprint.route("/orders",methods=["POST"])
+def pay():
+   #執行程式碼
+@orders_blueprint.route("orders/<string:orderID>",methods=["GET"])
+def getThankyou(orderID):
+   #執行程式碼
+```
+2. api_mrts.py
+```
+
+```
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
