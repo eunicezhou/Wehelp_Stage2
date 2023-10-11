@@ -146,8 +146,100 @@ ALTER TABLE img ADD INDEX (attraction_id);
 #對attraction中的id建立外鍵
 ALTER TABLE attraction ADD FOREIGN KEY(id) REFERENCES img(attraction_id);
 ```
-Step 6 
+Step 6 在python中將資料寫入MySql
+```
+#將資料放入img table中
+for index, item in enumerate(actual_data):
+    file = item['file']
+    file_str = ''.join(file)
+    file_list = file_str.split('http')
+    picture_list = []
+    for file_item in file_list:
+        print(file_item)
+        lowerCase = file_item.lower()
+        if "jpg" in lowerCase :
+            picture_list.append('http' + file_item)
+        elif "png" in lowerCase :
+            picture_list.append('http' + file_item)
+        else:
+            pass
+        print(file_item)
+    new_index = index + 1
+    for picture in picture_list:
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("INSERT INTO img(attraction_id,image) \
+                   VALUES (%s,%s)",(new_index,picture))
+        connection.commit()
 
+#將資料放入mrt table中
+mrt_set = []
+for item in actual_data:
+    mrt = item['MRT']
+    if mrt == None:
+        pass
+    else:
+        mrt_str = ''.join(mrt)
+        if mrt_str not in mrt_set:
+            mrt_set.append(mrt_str)
+for station in range(len(mrt_set)):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("INSERT INTO mrt(mrt) \
+                   VALUES (%s)",(mrt_set[station],))
+    connection.commit()
+
+#將attraction table中的mrtID與mrt table 的mrt名稱相同者改以ID表示
+cursor = connection.cursor(dictionary=True)
+cursor.execute("SELECT * FROM mrt")
+mrt_dict = cursor.fetchall()
+cursor.execute("SELECT mrt_id FROM attraction")
+attraction_mrt_dict = cursor.fetchall()
+mrt_dictionary = {}
+for station in mrt_dict:
+    mrt_mrt = station['mrt']
+    mrt_mrtID = station['mrtID']
+    mrt_dictionary[mrt_mrt]=mrt_mrtID
+    mrt_key = list(mrt_dictionary.keys())
+    
+for i in range(len(attraction_mrt_dict)-1):
+    mrt_id = attraction_mrt_dict[i]['mrt_id']
+    if mrt_id in mrt_key:
+        attraction_mrt_dict[i]['mrt_id'] = mrt_dictionary[mrt_id]
+        cursor.execute("UPDATE attraction SET mrt_id = %s WHERE mrt_id = %s",(attraction_mrt_dict[i]['mrt_id'],mrt_id))
+connection.commit()
+
+#建立category table
+cat_set = []
+for item in actual_data:
+    cat = item['CAT']
+    cat_str = ''.join(cat)
+    if cat_str not in cat_set:
+        cat_set.append(cat_str)
+for type in range(len(cat_set)):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("INSERT INTO category(category) \
+                   VALUES (%s)",(cat_set[type],))
+    connection.commit()
+
+#將attraction table中的categoryID與category table 的category名稱相同者改以ID表示
+cursor = connection.cursor(dictionary=True)
+cursor.execute("SELECT * FROM category")
+cat_dict = cursor.fetchall()
+cursor.execute("SELECT category_id FROM attraction")
+attraction_cat_dict = cursor.fetchall()
+cat_dictionary = {}
+for type in cat_dict:
+    cat_cat = type['category']
+    cat_catID = type['categoryID']
+    cat_dictionary[cat_cat]=cat_catID
+    mrt_key = list(cat_dictionary.keys())
+    
+for i in range(len(attraction_cat_dict)):
+    cat_id = attraction_cat_dict[i]['category_id']
+    if cat_id in mrt_key:
+        attraction_cat_dict[i]['category_id'] = cat_dictionary[cat_id]
+        cursor.execute("UPDATE attraction SET category_id = %s WHERE category_id = %s",(attraction_cat_dict[i]['category_id'],cat_id))
+connection.commit()
+```
 ## Part 1 - 2：開發旅遊景點 API
 請仔細的按照 API 文件「旅遊景點」、「捷運站」部份的指⽰，完成三個 API。 景點的圖片
 網址以及捷運站名稱列表皆為陣列格式，可能包含⼀到多筆資料。
