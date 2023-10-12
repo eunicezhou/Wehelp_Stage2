@@ -343,7 +343,9 @@ response物件
 
 (1) 獲取資訊的流程
 ```sequence
-前端->currentpage,keyword,observer
+Note left of frontend: setup currentpage,keyword,observer
+frontend->/api/attractions?page=${currentpage}&keyword=${keyword}
+backend-->response
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
