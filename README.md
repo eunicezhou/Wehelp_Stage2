@@ -302,18 +302,54 @@ def connect(execute_str,execute_argument=None):
 ```
 #先載入會使用到的模組、session_key、資料庫等等
 #建立blueprint物件
-attractions_blueprint = Blueprint('api_orders',__name__,template_folder= 'api')
+attractions_blueprint = Blueprint('api_attractions',__name__,template_folder= 'api')
 
 #建立路徑
-@orders_blueprint.route("/orders",methods=["POST"])
-def pay():
+@attractions_blueprint.route("/attractions",methods=["POST"])
+def apiattraction():
    #執行程式碼
-@orders_blueprint.route("orders/<string:orderID>",methods=["GET"])
-def getThankyou(orderID):
+
+@attractions_blueprint.route("/attractions/<int:attractionID>")
+def get_attraction(attractionID):
    #執行程式碼
 ```
 2. api_mrts.py
 ```
+#先載入會使用到的模組、session_key、資料庫等等
+#建立blueprint物件
+mrts_blueprint = Blueprint('api_mrts',__name__,template_folder= 'api')
+
+#建立路徑
+@mrts_blueprint.route("mrts")
+def mrt_api():
+   #執行程式碼
+```
+#### 3. 設計api函式
+###### (1) attractions景點流程設計:
+/api/attractions,method=GET
+取得不同分夜的旅遊景點列表資料，也可以根據標題關鍵字或捷運名稱篩選
+response物件
+|status|response|
+|------|--------|
+|200|{
+  "nextPage": 1,
+  "data": [
+    {
+      "id": 10,
+      "name": "平安鐘",
+      "category": "公共藝術",
+      "description": "平安鐘祈求大家的平安，這是為了紀念 921 地震週年的設計",
+      "address": "臺北市大安區忠孝東路 4 段 1 號",
+      "transport": "公車：204、212、212直",
+      "mrt": "忠孝復興",
+      "lat": 25.04181,
+      "lng": 121.544814,
+      "images": [
+        "http://140.112.3.4/images/92-0.jpg"
+      ]
+    }
+  ]
+}|
 
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
