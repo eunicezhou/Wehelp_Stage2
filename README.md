@@ -342,10 +342,7 @@ response物件
 |500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 
 (1) 獲取資訊的流程
-```sequence
-Note left of frontend: setup currentpage,keyword,observer
-frontend->/api/attractions?page=${currentpage}&keyword=${keyword}
-backend-->response
-```
+![image](https://github.com/eunicezhou/Wehelp_Stage2/assets/131647842/4f7d4545-49c9-49bd-90ee-a0f0a45e0694)
+
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
