@@ -345,10 +345,10 @@ response物件
 
 ![image](https://github.com/eunicezhou/Wehelp_Stage2/assets/131647842/4f7d4545-49c9-49bd-90ee-a0f0a45e0694)
 
-- javascript
-  1. 從後端索取景點資訊:
-  設定基本函式
-  ->設定if...else由有無關鍵字決定要執行的函式
+(2) javascript
+  - 從後端索取景點資訊:
+    設定基本函式
+    ->設定if...else由有無關鍵字決定要執行的函式
 ```
 //設定變數
 let currentPage = 0;
@@ -379,8 +379,17 @@ async function getAttraction(){
     }
     //其他程式碼......
 }
-  ```
-   2. 將獲取的資料放進動態生成的元素中，並插入HTML裡面
+```
+   - 搜尋關鍵字事件
+   監聽搜尋按鈕的點擊事件，當點擊事件被觸發
+   ->停止對觀察物件的觀察
+   ->將頁面中原本顯示的景點物件刪除
+   ->設定關鍵字為輸入的字詞
+   ->設定currentpage=0
+   ->重新啟動對觀察物件的觀察觀察
+   ->當觀察物件進入視窗，依照觀察物件的callback function，會進入getAttraction function
+     
+   - 將獲取的資料放進動態生成的元素中，並插入HTML裡面
 ```
 async function getAttraction(){
   //其他程式碼......
@@ -398,8 +407,8 @@ async function getAttraction(){
             'id':site["id"]}
             wrapAttraction.innerHTML=`
                 <a href="/attraction/${attractionInmation['id']}">
-                    <div id="${attractionInmation['id']}" class="attractionImage" style="background-image:url(${attractionInmation['imageURL']})">
-                    </div>
+                   <div id="${attractionInmation['id']}" class="attractionImage" style="background-image:url(${attractionInmation['imageURL']})">
+                   </div>
                 </a>
                 <div class="attractionName bold">${attractionInmation['name']}</div>
                 <div class="description bold">
@@ -420,9 +429,13 @@ async function getAttraction(){
   }
 }
 ```
-  3.建立observer元素
-  建立一個 IntersectionObserver 物件
-  ->設定callback函式，當observer物件進入或離開視窗，該函式會被呼叫
+  - 建立observer元素
+    建立一個 IntersectionObserver 物件
+    ->設定callback函式，當observer物件進入或離開視窗，該函式會被呼叫
+    ->設定entries物件，其內包含所有被觀察元素狀態的陣列
+    ->當被觀察物件，也就是entry進入觀察範圍(即isIntersecting變為true時)，執行從後端獲取景點資料並生成新元素的函式
+    ->將currentpage轉為從獲取景點函式中回傳的page值(若後續還有資料，值會變為原頁數+1；若無，則值為null)
+    ->設定觀察對象
 ```
 let observer = new IntersectionObserver(async(entries)=>{
     for(const entry of entries){
