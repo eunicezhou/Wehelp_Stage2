@@ -514,6 +514,5 @@ def apiattraction():
 ```
 ###### 根據景點編號取得景點資料(/api/attraction/{attractionId}路由)
 (1) javascript
-  - 
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
