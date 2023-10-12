@@ -342,7 +342,98 @@ response物件
 |500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 
 (1) 獲取資訊的流程
+
 ![image](https://github.com/eunicezhou/Wehelp_Stage2/assets/131647842/4f7d4545-49c9-49bd-90ee-a0f0a45e0694)
 
+- javascript
+  1. 從後端索取景點資訊:
+  設定基本函式
+  ->設定if...else由有無關鍵字決定要執行的函式
+```
+//設定變數
+let currentPage = 0;
+let next_page;
+let keyword;
+
+//設定基本函式
+async function attractionlist(url){
+  let response = await fetch(url);
+  let result = await response.json();
+  let results = result.data;
+  next_page = result.nextPage;
+  return[results,next_page];
+}
+
+//設定if...else
+async function getAttraction(){
+    let resultList;
+    let results;
+    if(keyword === undefined){
+        let url = `/api/attractions?page=${currentPage}`;
+        resultList = await attractionlist(url);
+        results = resultList[0];
+    }else{
+        let url = `/api/attractions?page=${currentPage}&keyword=${keyword}`;
+        resultList = await attractionlist(url);
+        results = resultList[0];
+    }
+    //其他程式碼......
+}
+  ```
+   2. 將獲取的資料放進動態生成的元素中，並插入HTML裡面
+```
+async function getAttraction(){
+  //其他程式碼......
+  //設定若獲取的資料長度>0，則將資料放進動態生成的元素中
+  if (results.length>0){
+        let nextPage = resultList[1];
+        let r;
+        for(r=0;r<results.length;r++){
+            let wrapAttraction = document.createElement("div");
+            let site = results[r];
+            let attractionInmation = {'category':site["category"],
+            'imageURL':site["image"][0],
+            'mrt':site["mrt"],
+            'name':site["name"],
+            'id':site["id"]}
+            wrapAttraction.innerHTML=`
+                <a href="/attraction/${attractionInmation['id']}">
+                    <div id="${attractionInmation['id']}" class="attractionImage" style="background-image:url(${attractionInmation['imageURL']})">
+                    </div>
+                </a>
+                <div class="attractionName bold">${attractionInmation['name']}</div>
+                <div class="description bold">
+                    <div class="floatLeft">${attractionInmation['mrt']}</div>
+                    <div class="floatright">${attractionInmation['category']}</div>
+                </div>`;   
+            attractions.appendChild(wrapAttraction);
+        }
+        //檢查這個分頁後面是否還有其他資料，若無則不繼續偵測observer元素
+        if(nextPage===null){
+            observer.unobserve(footer);
+        }
+        return nextPage;
+  }else{
+     let nextPage = null;
+     observer.unobserve(footer);
+     return nextPage 
+  }
+}
+```
+  3.建立observer元素
+  建立一個 IntersectionObserver 物件
+  ->設定callback函式，當observer物件進入或離開視窗，該函式會被呼叫
+```
+let observer = new IntersectionObserver(async(entries)=>{
+    for(const entry of entries){
+        if(entry.isIntersecting){
+            let nextPage = await getAttraction();
+            currentPage = nextPage;
+        }
+    }
+});
+const footer = document.querySelector(".footer");
+observer.observe(footer);
+```
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
