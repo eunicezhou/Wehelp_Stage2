@@ -324,10 +324,9 @@ mrts_blueprint = Blueprint('api_mrts',__name__,template_folder= 'api')
 def mrt_api():
    #執行程式碼
 ```
-#### 3. 設計api函式
-###### (1) attractions景點流程設計:
+#### 3. 設計景點api
 /api/attractions,method=GET
-取得不同分夜的旅遊景點列表資料，也可以根據標題關鍵字或捷運名稱篩選
+取得不同分頁的旅遊景點列表資料，也可以根據標題關鍵字或捷運名稱篩選
 response物件
 |status|description|response|
 |------|-----------|--------|
@@ -342,7 +341,10 @@ response物件
 |400|景點編號不正確|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 |500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 
-
+(1) 獲取資訊的流程
+```sequence
+Note left of 前端: 1.設定currentpage(預設為0) 2. 設定keyword(預設為null) 3. 設定observer
+前端->currentpage,keyword,observer
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
