@@ -453,41 +453,41 @@ observer.observe(footer);
 ```
 @attractions_blueprint.route("/attractions")
 def apiattraction():
-  page = request.args.get("page")
-  keyword = request.args.get("keyword")
-  if page == None:
-    results_dict = {"error": True, "message": "請輸入page"}
-    finalresult = results_convert(results_dict)
-    return finalresult,500
-  else:
-    try:
-      page = int(page)
-      except ValueError:
-      results_dict = {"error": True, "message": "page格式為數字"}
-      finalresult = results_convert(results_dict)
-      return finalresult, 500
-      execute_argument = page * 12
-      if keyword == None:
-	query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction LIMIT 12 OFFSET %s"
-        nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction LIMIT 1 OFFSET %s"
-	page_data = connect(query, (execute_argument,))
-	nextPage_data = connect(nextPage, (execute_argument+12,))
-	if nextPage_data == []:
-           nextPageValue = None
-	else:
-           nextPageValue = page + 1
-      else:
-	query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt FROM attraction left JOIN mrt ON attraction.mrt_id = mrt.mrtID WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 12 OFFSET %s"
+	page = request.args.get("page")
+	keyword = request.args.get("keyword")
+  	if page == None:
+    		results_dict = {"error": True, "message": "請輸入page"}
+    		finalresult = results_convert(results_dict)
+    		return finalresult,500
+  	else:
+    	try:
+      		page = int(page)
+		except ValueError:
+		results_dict = {"error": True, "message": "page格式為數字"}
+	        finalresult = results_convert(results_dict)
+	        return finalresult, 500
+	        execute_argument = page * 12
+        if keyword == None:
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction LIMIT 12 OFFSET %s"
+        	nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction LIMIT 1 OFFSET %s"
+		page_data = connect(query, (execute_argument,))
+		nextPage_data = connect(nextPage, (execute_argument+12,))
+		if nextPage_data == []:
+        	   nextPageValue = None
+		else:
+           	   nextPageValue = page + 1
+         else:
+		query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt FROM attraction left JOIN mrt ON attraction.mrt_id = mrt.mrtID WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 12 OFFSET %s"
 		nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt FROM attraction left JOIN mrt ON attraction.mrt_id = mrt.mrtID WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 1 OFFSET %s"
-	keyword_str = f'%{keyword}%'
-	page_data = connect(query,(keyword_str,keyword_str,execute_argument))
-	nextPage_data = connect(nextPage,(keyword_str,keyword_str,execute_argument+12,))
-	if nextPage_data == []:
-           nextPageValue = None
-	else:
-           nextPageValue = page + 1
-	results = []
-	for item in page_data:
+		keyword_str = f'%{keyword}%'
+		page_data = connect(query,(keyword_str,keyword_str,execute_argument))
+		nextPage_data = connect(nextPage,(keyword_str,keyword_str,execute_argument+12,))
+		if nextPage_data == []:
+           	    nextPageValue = None
+		else:
+                    nextPageValue = page + 1
+		results = []
+	 for item in page_data:
 		id = item[0]
 		attraction = item[1] # 顯示結果為 各風景區名稱(每次回圈只跑出一個結果)
 		if item[2] != None:
@@ -512,5 +512,7 @@ def apiattraction():
 		finalresult = results_convert(results_dict)
 	return finalresult
 ```
+###### 根據景點編號取得景點資料(/api/attraction/{attractionId}路由)
+
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
