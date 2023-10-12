@@ -343,7 +343,6 @@ response物件
 
 (1) 獲取資訊的流程
 ```sequence
-Note left of 前端: 1.設定currentpage(預設為0) 2. 設定keyword(預設為null) 3. 設定observer
 前端->currentpage,keyword,observer
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
