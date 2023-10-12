@@ -334,6 +334,15 @@ response物件
 |200|正常運作|{"nextPage": 1,"data": [{"id": 10,"name": "平安鐘","category": "公共藝術","description": "平安鐘祈求大家的平安，這是為了紀念 921 地震週年的設計","address": "臺北市大安區忠孝東路 4 段 1 號","transport": "公車：204、212、212直","mrt": "忠孝復興","lat": 25.04181,"lng": 121.544814,"images": ["http://140.112.3.4/images/92-0.jpg"]}]}|
 |500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 
+/api/attraction/{attractionId},method=GET
+根據景點編號取得景點資料
+|status|description|response|
+|------|-----------|--------|
+|200|正常運作|{"data": {"id": 10,"name": "平安鐘","category": "公共藝術","description": "平安鐘祈求大家的平安，這是為了紀念 921 地震週年的設計","address": "臺北市大安區忠孝東路 4 段 1 號","transport": "公車：204、212、212直","mrt": "忠孝復興","lat": 25.04181,"lng": 121.544814,"images": ["http://140.112.3.4/images/92-0.jpg"]}}|
+|400|景點編號不正確|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
+|500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
+
+
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
