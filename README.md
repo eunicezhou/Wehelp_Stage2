@@ -341,11 +341,12 @@ response物件
 |400|景點編號不正確|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 |500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 
-(1) 獲取資訊的流程
+###### 獲取資訊的流程
 
 ![image](https://github.com/eunicezhou/Wehelp_Stage2/assets/131647842/4f7d4545-49c9-49bd-90ee-a0f0a45e0694)
 
-(2) javascript
+###### 取得不同分頁的旅遊景點列表資料(/api/attractions路由)
+(1) javascript
   - 從後端索取景點資訊:
     設定基本函式
     ->設定if...else由有無關鍵字決定要執行的函式
@@ -381,7 +382,7 @@ async function getAttraction(){
 }
 ```
    - 搜尋關鍵字事件
-   \n監聽搜尋按鈕的點擊事件，當點擊事件被觸發
+   監聽搜尋按鈕的點擊事件，當點擊事件被觸發
    ->停止對觀察物件的觀察
    ->將頁面中原本顯示的景點物件刪除
    ->設定關鍵字為輸入的字詞
@@ -447,6 +448,69 @@ let observer = new IntersectionObserver(async(entries)=>{
 });
 const footer = document.querySelector(".footer");
 observer.observe(footer);
+```
+(2) python
+```
+@attractions_blueprint.route("/attractions")
+def apiattraction():
+  page = request.args.get("page")
+  keyword = request.args.get("keyword")
+  if page == None:
+    results_dict = {"error": True, "message": "請輸入page"}
+    finalresult = results_convert(results_dict)
+    return finalresult,500
+  else:
+    try:
+      page = int(page)
+      except ValueError:
+      results_dict = {"error": True, "message": "page格式為數字"}
+      finalresult = results_convert(results_dict)
+      return finalresult, 500
+      execute_argument = page * 12
+      if keyword == None:
+	query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction LIMIT 12 OFFSET %s"
+        nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng FROM attraction LIMIT 1 OFFSET %s"
+	page_data = connect(query, (execute_argument,))
+	nextPage_data = connect(nextPage, (execute_argument+12,))
+	if nextPage_data == []:
+           nextPageValue = None
+	else:
+           nextPageValue = page + 1
+      else:
+	query = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt FROM attraction left JOIN mrt ON attraction.mrt_id = mrt.mrtID WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 12 OFFSET %s"
+		nextPage = "SELECT id, attraction, mrt_id, category_id, introduction, transportation, address, lat, lng, mrt FROM attraction left JOIN mrt ON attraction.mrt_id = mrt.mrtID WHERE attraction LIKE %s OR mrt LIKE %s LIMIT 1 OFFSET %s"
+	keyword_str = f'%{keyword}%'
+	page_data = connect(query,(keyword_str,keyword_str,execute_argument))
+	nextPage_data = connect(nextPage,(keyword_str,keyword_str,execute_argument+12,))
+	if nextPage_data == []:
+           nextPageValue = None
+	else:
+           nextPageValue = page + 1
+	results = []
+	for item in page_data:
+		id = item[0]
+		attraction = item[1] # 顯示結果為 各風景區名稱(每次回圈只跑出一個結果)
+		if item[2] != None:
+			mrt_table = connect("SELECT mrt FROM mrt WHERE mrtID = %s",(item[2],))
+			mrt = mrt_table[0][0] # 顯示結果為 各風景區所在的捷運站名稱(每次回圈只跑出一個結果)
+		else:
+			mrt = "無鄰近捷運站"
+		category_table = connect("SELECT category FROM category WHERE categoryID = %s",(item[3],))
+		category = category_table[0][0] # 顯示結果為 各風景區的種類(每次回圈只跑出一個結果)
+		introduction = item[4]
+		transportation = item[5]
+		address = item[6]
+		lat = item[7]
+		lng = item[8]
+		img_list = connect("SELECT image FROM img WHERE attraction_id = %s", [id])
+		new_img_list = []
+		for img in img_list:
+			new_img_list.append(img[0])
+		result = {"id": id, "name": attraction,"category": category, "description": introduction, "address": address,"transport": transportation, "mrt": mrt, "lat": lat , "lng": lng, "image": new_img_list}
+		results.append(result)
+		results_dict = {"nextPage": nextPageValue, "data": results}
+		finalresult = results_convert(results_dict)
+	return finalresult
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
 請在 AWS EC2 的服務上建立⼀台 Linux 機器，透過遠端連線進⾏管理，最終將網站上線
