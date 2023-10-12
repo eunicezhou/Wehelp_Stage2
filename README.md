@@ -329,27 +329,10 @@ def mrt_api():
 /api/attractions,method=GET
 取得不同分夜的旅遊景點列表資料，也可以根據標題關鍵字或捷運名稱篩選
 response物件
-|status|response|
-|------|--------|
-|200|{
-  "nextPage": 1,
-  "data": [
-    {
-      "id": 10,
-      "name": "平安鐘",
-      "category": "公共藝術",
-      "description": "平安鐘祈求大家的平安，這是為了紀念 921 地震週年的設計",
-      "address": "臺北市大安區忠孝東路 4 段 1 號",
-      "transport": "公車：204、212、212直",
-      "mrt": "忠孝復興",
-      "lat": 25.04181,
-      "lng": 121.544814,
-      "images": [
-        "http://140.112.3.4/images/92-0.jpg"
-      ]
-    }
-  ]
-}|
+|status|description|response|
+|------|-----------|--------|
+|200|正常運作|{"nextPage": 1,"data": [{"id": 10,"name": "平安鐘","category": "公共藝術","description": "平安鐘祈求大家的平安，這是為了紀念 921 地震週年的設計","address": "臺北市大安區忠孝東路 4 段 1 號","transport": "公車：204、212、212直","mrt": "忠孝復興","lat": 25.04181,"lng": 121.544814,"images": ["http://140.112.3.4/images/92-0.jpg"]}]}|
+|500|伺服器內部異常|{"error": true,"message": "請按照情境提供對應的錯誤訊息"}|
 
 ```
 ## Part 1 - 3：將網站上線到 AWS EC2
