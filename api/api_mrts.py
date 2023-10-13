@@ -1,17 +1,11 @@
 from flask import *
 import mysql.connector
 from mysql.connector import pooling
+from flask_cors import CORS
 import json
-from datetime import datetime, timedelta
-from functools import wraps
-import pandas as pd
+import jwt
 from dotenv import load_dotenv
 import os
-from api.api_orders import orders_blueprint
-from api.api_attractions import attractions_blueprint
-from api.api_user import user_blueprint
-from api.api_mrts import mrts_blueprint
-from api.api_booking import booking_blueprint
 
 load_dotenv()
 
@@ -26,15 +20,11 @@ app.secret_key = app_key
 def results_convert(result):
 	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
 	return response
-# app.config["JSON_AS_ASCII"]=False
-# app.config["TEMPLATES_AUTO_RELOAD"]=True
-# app.config["JSON_SORT_KEYS"] = False
 
 #============串聯資料庫============================================================
-con_password = os.getenv('DATABASE_PASSWORD')
 con ={
     'user':'root',
-    'password':con_password,
+    'password':database_password,
     'host':'localhost',
     'database':'stage2',
 }
@@ -56,26 +46,18 @@ def connect(execute_str,execute_argument=None):
 		cursor.close()
 		connection.close()
 	return result
+#==================================================================================
+mrts_blueprint = Blueprint('api_mrts',__name__,template_folder= 'api')
+#===================建立api=========================================================
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-#api
-app.register_blueprint(orders_blueprint,url_prefix= '/api')
-app.register_blueprint(attractions_blueprint,url_prefix= '/api')
-app.register_blueprint(mrts_blueprint,url_prefix= '/api')
-app.register_blueprint(booking_blueprint,url_prefix= '/api')
-app.register_blueprint(user_blueprint,url_prefix= '/api')
-
-#頁面路徑
-@app.route("/")
-def index():
-	return render_template("index.html")
-@app.route("/attraction/<id>")
-def attraction(id):
-	return render_template("attraction.html")
-@app.route("/booking")
-def booking():
-	return render_template("booking.html")
-@app.route("/thankyou")
-def thankyou():
-	return render_template("thankyou.html")
-
-app.run(debug=True, host="0.0.0.0", port=3000)
+@mrts_blueprint.route("mrts")
+def mrt_api():
+	mrt_count = connect("SELECT attraction.mrt_id, COUNT(*) AS count, mrt.mrt FROM attraction \
+					 LEFT JOIN mrt ON attraction.mrt_id = mrt.mrtID GROUP BY mrt_id ORDER BY count DESC;")
+	mrt_list = []
+	for mrt in mrt_count:
+		mrt_list.append(mrt[2])
+		results_dict = {"data":mrt_list}
+		finalresult = results_convert(results_dict)
+	return finalresult

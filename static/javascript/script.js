@@ -1,15 +1,13 @@
 let currentPage = 0;
-let next_page;
 let keyword;
 
 //創建mrtlist
 const mrtDiv = document.createElement("div");
-async function mrtlist(){
-    let response = await fetch('/api/mrts');
-    let data = await response.json(); //這邊所得到的data是['新北投', '劍潭', '關渡',...
-    const mrtdata = data.data
+async function mrtlist(url){
+    let response = await fetchInformation(url);
+    const mrtdata = response.data
     let i;
-    for(i=0;i<mrtdata.length;i++){
+    for(i=0;i < mrtdata.length;i++){
         if(mrtdata[i]!==null){
             const wrapText = document.createElement("div");
         let mrtText = document.createTextNode(mrtdata[i]);
@@ -19,7 +17,8 @@ async function mrtlist(){
     }
     mrtBar.innerHTML = mrtDiv.innerHTML;
 }
-mrtlist();
+mrtlist('/api/mrts');
+
 //建立捷運站連結
 const mrt = document.querySelector("#container__div_nav--content");
 mrt.addEventListener('click',function mrtStation(){
@@ -27,8 +26,7 @@ mrt.addEventListener('click',function mrtStation(){
     let parentElement = document.querySelector("#cintainer__div--content");
     let newElement = document.querySelectorAll("#cintainer__div--content>div");
     let i=0;
-    while(i<newElement.length){
-        console.log(newElement[i]);
+    while(i < newElement.length){
         parentElement.removeChild(newElement[i]);
         i++;
     }
@@ -38,6 +36,7 @@ mrt.addEventListener('click',function mrtStation(){
     currentPage = 0
     observer.observe(footer);
 })
+
 //建立mrtlist移動
 const mrtBar = document.querySelector("#container__div_nav--content")
 const attractions = document.querySelector("#cintainer__div--content");
@@ -60,76 +59,61 @@ function moveLeft(){
     }) 
 }
 
-//建立景點內容物件自動載入功能
-async function attractionlist(){
-    let response = await fetch(`/api/attractions?page=${currentPage}`);
-    let result = await response.json();
-    let results = result.data;
-    next_page = result.nextPage;
-    return[results,next_page];
-}
-//建立景點搜尋功能
-async function searchAttraction(){
-    let response = await fetch(`/api/attractions?page=${currentPage}&keyword=${keyword}`);
-    let result = await response.json();
-    let results = result.data;
-    next_page = result.nextPage;
-    return[results,next_page];
-    }
-
-async function getAttraction(){
-    let resultList;
-    let results;
+//獲取景點資訊
+async function getAttractionInfor(){
     if(keyword === undefined){
-        console.log(currentPage);
-        resultList = await attractionlist();
-        results = resultList[0];
-        // console.log(results);
+        let resultList = await fetchInformation(`/api/attractions?page=${currentPage}`)
+        .then(result=>{return result})
+        return resultList;
     }else{
-        console.log(currentPage);
-        resultList = await searchAttraction();
-        results = resultList[0];
-        // console.log(results);
+        let resultList = await fetchInformation(`/api/attractions?page=${currentPage}&keyword=${keyword}`)
+        .then(result=>{return result})
+        return resultList;
     }
-    if (results.length>0){
-        let nextPage = resultList[1];
-        let r;
-        for(r=0;r<results.length;r++){
+}
+//建立景點物件
+async function buildupElement(){
+    let resultArray = await getAttractionInfor();
+    let result = resultArray['data'];
+    if (result.length > 0){
+        let nextPage = resultArray['nextPage'];
+        for(let r=0;r < result.length;r++){
             let wrapAttraction = document.createElement("div");
-            let site = results[r];
+            let site = result[r];
             let attractionInmation = {'category':site["category"],
             'imageURL':site["image"][0],
             'mrt':site["mrt"],
             'name':site["name"],
             'id':site["id"]}
             wrapAttraction.innerHTML=`
-                <a href="/attraction/${attractionInmation['id']}">
-                    <div id="${attractionInmation['id']}" class="attractionImage" style="background-image:url(${attractionInmation['imageURL']})">
-                    </div>
-                </a>
-                <div class="attractionName bold">${attractionInmation['name']}</div>
-                <div class="description bold">
-                    <div class="floatLeft">${attractionInmation['mrt']}</div>
-                    <div class="floatright">${attractionInmation['category']}</div>
-                </div>`;   
+            <a href="/attraction/${attractionInmation['id']}">
+            <div id="${attractionInmation['id']}" class="attractionImage"
+            style="background-image:url(${attractionInmation['imageURL']})">
+            </div>
+            </a>
+            <div class="attractionName bold">${attractionInmation['name']}</div>
+            <div class="description bold">
+            <div class="floatLeft">${attractionInmation['mrt']}</div>
+            <div class="floatright">${attractionInmation['category']}</div>
+            </div>`;   
             attractions.appendChild(wrapAttraction);
         }
-        if(nextPage===null){
+        if(nextPage === null){
             observer.unobserve(footer);
         }
         return nextPage;
     }else{
         let nextPage = null;
         observer.unobserve(footer);
-        return nextPage 
+        return nextPage;
     }
-}   
-//建立intersection object API
+}
+
+//建立IntersectionObserver API物件
 let observer = new IntersectionObserver(async(entries)=>{
     for(const entry of entries){
         if(entry.isIntersecting){
-            let nextPage = await getAttraction();
-            currentPage = nextPage;
+            currentPage = await buildupElement();
         }
     }
 });
@@ -144,8 +128,7 @@ submitBTN.addEventListener('click',()=>{
     let parentElement = document.querySelector("#cintainer__div--content");
     let newElement = document.querySelectorAll("#cintainer__div--content>div");
     let i=0;
-    while(i<newElement.length){
-        console.log(newElement[i]);
+    while(i < newElement.length){
         parentElement.removeChild(newElement[i]);
         i++;
     }
@@ -153,5 +136,3 @@ submitBTN.addEventListener('click',()=>{
     currentPage = 0
     observer.observe(footer);
 })
-
-
