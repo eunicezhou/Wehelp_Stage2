@@ -1,55 +1,16 @@
 from flask import *
-import mysql.connector
-from mysql.connector import pooling
 from flask_cors import CORS
-import json
 import jwt
 import requests
 import pandas as pd
 import uuid
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
-
-app_key = os.getenv('APP_SECRET_KEY')
-database_password = os.getenv('DATABASE_PASSWORD')
-token_key = os.getenv('TOKEN_KEY')
-tappay_key = os.getenv('TAPPAY_PARTNER_KEY')
+from module_function.env_file import *
+from module_function.database import *
+from module_function.file_type_convert import *
 
 app=Flask(__name__)
 app.secret_key = app_key
-
-def results_convert(result):
-	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
-	return response
-
-#============串聯資料庫============================================================
-con_password = os.getenv('DATABASE_PASSWORD')
-con ={
-    'user':'root',
-    'password':con_password,
-    'host':'localhost',
-    'database':'stage2',
-}
-# 建立連接池
-connection_pool = pooling.MySQLConnectionPool(pool_name='taipei-travel',pool_size=5,**con)
-# 從連接池中取得連接
-def connect(execute_str,execute_argument=None):
-	connection = connection_pool.get_connection()
-	cursor = connection.cursor()
-	try:
-		cursor.execute("USE stage2")
-		cursor.execute(execute_str,execute_argument)
-		result = cursor.fetchall()
-		connection.commit()
-	except Exception as err:
-		print(err)
-		result = None
-	finally:
-		cursor.close()
-		connection.close()
-	return result
 
 orders_blueprint = Blueprint('api_orders',__name__,template_folder= 'api')
 
@@ -139,7 +100,7 @@ def pay():
 		finalresult = results_convert(responseData)
 		return finalresult,500
 
-@orders_blueprint.route("/api/orders/<string:orderID>",methods=["GET"])
+@orders_blueprint.route("/orders/<string:orderID>",methods=["GET"])
 def getThankyou(orderID):
 	token = request.headers.get('Authorization')
 	if token == None:

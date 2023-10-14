@@ -1,48 +1,13 @@
 from flask import *
-from mysql.connector import pooling
-from flask_cors import CORS
 from datetime import datetime, timedelta
-import mysql.connector
-import json
-import requests
-import jwt
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+from module_function.env_file import *
+from module_function.database import *
+from module_function.file_type_convert import *
+from module_function.token import *
 
 app=Flask(__name__)
-app.secret_key = 'your_secret_key'
-
-def results_convert(result):
-	response = Response(json.dumps(result,ensure_ascii = False), content_type = 'application/json; charset = utf-8')
-	return response
-
-#串聯資料庫
-con ={
-    'user':'root',
-    'password':'password',
-    'host':'localhost',
-    'database':'stage2',
-}
-# 建立連接池
-connection_pool = pooling.MySQLConnectionPool(pool_name='taipei-travel',pool_size=5,**con)
-# 從連接池中取得連接
-def connect(execute_str,execute_argument=None):
-	connection = connection_pool.get_connection()
-	cursor = connection.cursor()
-	try:
-		cursor.execute("USE stage2")
-		cursor.execute(execute_str,execute_argument)
-		result = cursor.fetchall()
-		connection.commit()
-	except Exception as err:
-		print(err)
-		result = None
-	finally:
-		cursor.close()
-		connection.close()
-	return result
+app.secret_key = app_key
 
 user_blueprint = Blueprint('api_user',__name__,template_folder= 'api')
 
@@ -68,7 +33,6 @@ def memberSignup():
 			result = {"ok":True}
 			finalresult = results_convert(result)
 			status = 200
-			# return finalresult
 		except Exception as err:
 			result = {"error": True,"message": err}
 			finalresult = results_convert(result)
@@ -91,21 +55,23 @@ def login_put():
                 "email":baseInfor[0][2],
                 "exp":datetime.utcnow()+timedelta(days=7)
             }
-            encode_token = jwt.encode(filedict, 'private_key',algorithm='HS256')
-            return jsonify({"token":encode_token})
+            token_algorithm = 'HS256'
+            encode_token = encoding(filedict, token_key, algorithm= token_algorithm)
+            return encode_token
         else:
             if email not in memberInfor[0]:
                 result = {"error": True,"message": "此信箱未註冊"}
                 finalresult = results_convert(result)
-                return finalresult,400
+                status = 400
             elif email in memberInfor[0] or password in memberInfor[1]:
                 result = {"error": True,"message": "信箱或密碼錯誤"}
                 finalresult = results_convert(result)
-                return finalresult,400
+                status = 400
     except Exception as err:
         result = {"error": True,"message": err}
         finalresult = results_convert(result)
-        return finalresult,500
+        status = 500
+    return finalresult,status
 	
 @user_blueprint.route("/user/auth", methods=["GET"])
 def login_get():
@@ -113,8 +79,9 @@ def login_get():
         token = request.headers.get('Authorization')
         if token:
             decode_token = token.split('Bearer ')
-            information = jwt.decode(decode_token[1], 'private_key', algorithms=['HS256'])
-            return jsonify({"data":information})
+            decode_algorithms = ['HS256']
+            information = decoding(decode_token[1], token_key, decode_algorithms)
+            return information
         else:
             return redirect("/")
     except Exception as err:
