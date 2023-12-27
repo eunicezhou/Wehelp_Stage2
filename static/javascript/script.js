@@ -1,6 +1,9 @@
 let currentPage = 0;
 let keyword;
 
+//mrt
+const mrt = document.querySelector("#container__div_nav--content");
+
 //創建mrtlist
 const mrtDiv = document.createElement("div");
 async function mrtlist(url){
@@ -10,17 +13,26 @@ async function mrtlist(url){
     for(i=0;i < mrtdata.length;i++){
         if(mrtdata[i]!==null){
             const wrapText = document.createElement("div");
-        let mrtText = document.createTextNode(mrtdata[i]);
-        wrapText.appendChild(mrtText);
-        mrtDiv.appendChild(wrapText);
+            let mrtText = document.createTextNode(mrtdata[i]);
+            wrapText.appendChild(mrtText);
+            mrtDiv.appendChild(wrapText);
         }
     }
-    mrtBar.innerHTML = mrtDiv.innerHTML;
+    mrt.innerHTML = mrtDiv.innerHTML;
+    //建立met的lazyload=>目前沒有成功
+    const mrtIntersectionObserver = new IntersectionObserver(
+        entry=>{
+            if(entry.isIntersecting){
+                entry.target.classList.add('fromRightEaseIn');
+                console.log(entry);
+                mrtIntersectionObserver.unobserve(entry.target);
+            }
+        },{threshold: 1});
+    mrtIntersectionObserver.observe(mrt);
 }
 mrtlist('/api/mrts');
 
 //建立捷運站連結
-const mrt = document.querySelector("#container__div_nav--content");
 mrt.addEventListener('click',function mrtStation(){
     observer.unobserve(footer);
     let parentElement = document.querySelector("#cintainer__div--content");
@@ -38,7 +50,6 @@ mrt.addEventListener('click',function mrtStation(){
 })
 
 //建立mrtlist移動
-const mrtBar = document.querySelector("#container__div_nav--content")
 const attractions = document.querySelector("#cintainer__div--content");
 const righttbtn = document.querySelector("#container__div--rightbar")
 const lefttbtn = document.querySelector("#container__div--leftbar")
@@ -53,7 +64,7 @@ function moveRight(){
 }
 function moveLeft(){
     let currentPosition = mrtBar.scrollLeft;
-    mrtBar.scrollTo({
+    mrt.scrollTo({
         left:currentPosition - 553,
         behavior:'smooth'
     }) 
@@ -136,3 +147,5 @@ submitBTN.addEventListener('click',()=>{
     currentPage = 0
     observer.observe(footer);
 })
+
+

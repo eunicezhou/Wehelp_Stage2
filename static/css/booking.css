@@ -13,13 +13,13 @@
     width:1000px;
     margin: 0 auto;
 }
-#header--top{
+.header--top_div--welcome{
     margin-top: 10px;
     display: flex;
     align-items: flex-start;
     color:#666666;
 }
-.record{
+.header--top_div--record{
     padding: 0 10px 10px;
 }
 .header--buttom{

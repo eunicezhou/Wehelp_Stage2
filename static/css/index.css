@@ -1,8 +1,8 @@
-/* 設定header */
+/* 設定header元素版面特性 */
 .header{
-    background-image: url(../image/[orig]\ welcome\ image.jpg);
+    background-image: url(../image/welcome_image.avif);
     background-size: cover;
-    height: 320px;
+    height: 110vh;
     margin-top: 0px;
     display: flex;
     justify-content: center;
@@ -16,42 +16,85 @@
     box-sizing: border-box;
     padding:10px;
     grid-template-rows: 83px 20px 46px;
-    grid-template-columns: 100%;
+    grid-template-columns: auto 500px;
+    opacity: 0.9;
 }
 #header__text{
     grid-row:1/2;
+    grid-column: 2/3;
     display: grid;
     grid-template-rows: 2fr 1fr; /* 兩列 */
     grid-gap: 20px;
 }
 #header--input{
     grid-row:3/4;
+    grid-column: 2/3;
 }
 #header__input{
-    width:400px;
+    width:280px;
     height: 100%;
     padding-left:15px;
-    float:left;
+    float: left;
     border: none;
     border-radius: 3px 0 0 3px;
 }
 #header__btn{
     background-color: #448899;
     height:48px;
-    padding-left: 5px;
-    padding-right: 2px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding: 2px 2px 2px 5px;
     border-radius: 0 5px 5px 0;
     border: none;
     width:60px;
+    margin: 0;
 }
 #header__btn img{
     width: 30px;
     height: 30px;
 }
-
-/* 設定content部分 */
+/*設定header動畫*/
+.fromRightEaseIn{
+    animation-name: fromRightEaseIn;
+    animation-duration: 1s;
+}
+@keyframes fromRightEaseIn{
+    0%{
+        transform: translateX(10%);
+        opacity: 0;
+    }
+    50%{
+        transform: translateX(10%);
+        opacity: 0;
+    }
+    100%{
+        transform: none;
+        opacity:1 ;
+    }
+}
+.dropDown{
+    animation-name: dropDown;
+    animation-duration: 1.5s;
+}
+@keyframes dropDown{
+    0%{
+        opacity: 0;
+        transform:scaleY(0);
+        transform-origin: top;
+    }
+    67%{
+        opacity: 0;
+        transform:scaleY(0);
+        transform-origin: top; 
+    }
+    75%{
+        opacity: 0; 
+    }
+    100%{
+        opacity: 1;
+        transform:scaleY(1);
+        transform-origin: top; 
+    }
+}
+/* 設定content版面特性 */
 .container{
     width: 1200px;
     margin-left: auto;
@@ -110,7 +153,7 @@
     gap:30px;
 }
 #cintainer__div--content>div{
-    height: 242px;
+    height: 285px;
 }
 .attractionImage{
     width: 270px;

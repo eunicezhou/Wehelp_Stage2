@@ -6,7 +6,21 @@
 {% endblock css %}
 {% block content %}
 <section class="header">
-    <div id="header--top" class="bold"></div>
+    <div id="header--top">
+        <div class="header--top_div--welcome bold"></div>
+        <div class="header--top_div--record"></div>
+    </div>
+    <div class="header--buttom">
+        <div class="header--left">
+        </div>
+        <div class="header--right">
+            <div class="header--attraction bold">
+                <span>台北一日遊 : <span id="attraction"></span></span>
+                <img class="delete" src="./static/image/icon_delete.png">
+            </div>
+            <div class="header--purchase"></div>
+        </div>
+    </div>
 </section>
 <section class="content">
     <div class="main"></div>
