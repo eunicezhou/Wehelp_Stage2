@@ -69,6 +69,7 @@ def pay():
 			}
 			response = requests.post(tappay_api_url, json=tappay_api_data, headers=headers)
 			responseJson = response.json()
+			print(responseJson)
 			status = responseJson['status']
 			message = responseJson['msg']
 			if status!= 0:

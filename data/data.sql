@@ -36,6 +36,7 @@ CREATE TABLE `attraction` (
   PRIMARY KEY (`id`),
   KEY `mrt_id` (`mrt_id`),
   KEY `category_id` (`category_id`),
+  KEY `index_attraction` (`attraction`),
   CONSTRAINT `attraction_ibfk_1` FOREIGN KEY (`mrt_id`) REFERENCES `mrt` (`mrtID`),
   CONSTRAINT `attraction_ibfk_2` FOREIGN KEY (`id`) REFERENCES `img` (`attraction_id`),
   CONSTRAINT `attraction_ibfk_3` FOREIGN KEY (`category_id`) REFERENCES `category` (`categoryID`)
@@ -139,7 +140,8 @@ DROP TABLE IF EXISTS `mrt`;
 CREATE TABLE `mrt` (
   `mrtID` int NOT NULL AUTO_INCREMENT,
   `mrt` varchar(10) NOT NULL,
-  PRIMARY KEY (`mrtID`)
+  PRIMARY KEY (`mrtID`),
+  KEY `index_mrt` (`mrt`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,7 +151,7 @@ CREATE TABLE `mrt` (
 
 LOCK TABLES `mrt` WRITE;
 /*!40000 ALTER TABLE `mrt` DISABLE KEYS */;
-INSERT INTO `mrt` VALUES (1,'新北投'),(2,'雙連'),(3,'士林'),(4,'劍潭'),(5,'唭哩岸'),(6,'大安森林公園'),(7,'象山'),(8,'龍山寺'),(9,'行天宮'),(10,'中正紀念堂'),(11,'市政府'),(12,'動物園'),(13,'關渡'),(14,'忠孝新生'),(15,'臺大醫院'),(16,'台北101／世貿'),(17,'松江南京'),(18,'中山'),(19,'國父紀念館'),(20,'文德'),(21,'圓山'),(22,'大湖公園'),(23,'大直'),(24,'石牌'),(25,'忠義'),(26,'西門'),(27,'松山'),(28,'北投'),(29,'葫洲'),(30,'木柵'),(31,'芝山'),(32,'公館');
+INSERT INTO `mrt` VALUES (18,'中山'),(10,'中正紀念堂'),(32,'公館'),(4,'劍潭'),(12,'動物園'),(28,'北投'),(16,'台北101／世貿'),(5,'唭哩岸'),(19,'國父紀念館'),(21,'圓山'),(3,'士林'),(6,'大安森林公園'),(22,'大湖公園'),(23,'大直'),(11,'市政府'),(14,'忠孝新生'),(25,'忠義'),(20,'文德'),(1,'新北投'),(30,'木柵'),(27,'松山'),(17,'松江南京'),(24,'石牌'),(15,'臺大醫院'),(31,'芝山'),(29,'葫洲'),(9,'行天宮'),(26,'西門'),(7,'象山'),(13,'關渡'),(2,'雙連'),(8,'龍山寺');
 /*!40000 ALTER TABLE `mrt` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,8 +174,10 @@ CREATE TABLE `record` (
   `date` varchar(20) DEFAULT NULL,
   `time` varchar(50) DEFAULT NULL,
   `status` varchar(10) DEFAULT '未繳款',
-  PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`order_id`),
+  KEY `member_id` (`member_id`),
+  CONSTRAINT `record_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,7 +186,7 @@ CREATE TABLE `record` (
 
 LOCK TABLES `record` WRITE;
 /*!40000 ALTER TABLE `record` DISABLE KEYS */;
-INSERT INTO `record` VALUES (1,'42a3a43d-68ca-46ac-940b-1fc8db7d0571',1,2,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(2,'f80085d5-b71c-4fae-88cc-9416d7c8a161',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(3,'657f6086-e5b6-4cec-962a-5c93bb593eb0',1,2,2500,'周紫珍','eunice3157538@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(4,'b05d0d30-007e-4be9-814a-235bd5a21a46',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-18','下午1點到5點','已繳款'),(5,'80236043-cf7e-4d7e-8288-5a0484233b18',1,19,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(6,'79dbdee3-912a-4b31-9d82-28eec356ac90',1,33,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(7,'3e4f2f8c-85ab-4c26-9a16-430f5b3eb5be',1,1,2500,'林韋杰','nick@gmail.com','0978888888','2023-10-18','下午1點到5點','已繳款'),(8,'a803154f-c7f7-4676-aa59-a2aa3bc09b9a',2,4,2000,'888888','testtest@gmail.com','09888888','2023-11-02','早上8點到12點','已繳款'),(9,'52b76717-89a1-47dd-b754-e5d21bee86d6',2,34,2000,'testtest','testtest@gmail.com','0988888888','2023-12-20','早上8點到12點','已繳款'),(10,'b58f9f65-2318-4141-b13e-d59a1a844ea4',2,15,2000,'test','testest@gmail.com','0988888888','2023-10-30','早上8點到12點','已繳款'),(11,'6ec9594f-d12f-4bb1-b746-5a4f91af90db',2,15,2000,'test','testest@gmail.com','0988888888','2023-10-30','早上8點到12點','已繳款'),(12,'8c0be7c6-d7f2-4a84-a9c6-00fede08134b',2,3,2000,'test','testtest@gmail.com','0988888888','2023-11-01','早上8點到12點','已繳款'),(13,'2e74f656-9c46-484b-a0d5-a0d18d4bbbdc',2,3,2000,'test','testtest@gmail.com','0988888888','2023-11-01','早上8點到12點','已繳款');
+INSERT INTO `record` VALUES (1,'42a3a43d-68ca-46ac-940b-1fc8db7d0571',1,2,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(2,'f80085d5-b71c-4fae-88cc-9416d7c8a161',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(3,'657f6086-e5b6-4cec-962a-5c93bb593eb0',1,2,2500,'周紫珍','eunice3157538@gmail.com','0978961486','2023-10-26','下午1點到5點','已繳款'),(4,'b05d0d30-007e-4be9-814a-235bd5a21a46',1,2,2500,'周紫珍','0826@gmail.com','0978961486','2023-10-18','下午1點到5點','已繳款'),(5,'80236043-cf7e-4d7e-8288-5a0484233b18',1,19,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(6,'79dbdee3-912a-4b31-9d82-28eec356ac90',1,33,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-01','早上8點到12點','已繳款'),(7,'3e4f2f8c-85ab-4c26-9a16-430f5b3eb5be',1,1,2500,'林韋杰','nick@gmail.com','0978888888','2023-10-18','下午1點到5點','已繳款'),(8,'a803154f-c7f7-4676-aa59-a2aa3bc09b9a',2,4,2000,'888888','testtest@gmail.com','09888888','2023-11-02','早上8點到12點','已繳款'),(9,'52b76717-89a1-47dd-b754-e5d21bee86d6',2,34,2000,'testtest','testtest@gmail.com','0988888888','2023-12-20','早上8點到12點','已繳款'),(10,'b58f9f65-2318-4141-b13e-d59a1a844ea4',2,15,2000,'test','testest@gmail.com','0988888888','2023-10-30','早上8點到12點','已繳款'),(11,'6ec9594f-d12f-4bb1-b746-5a4f91af90db',2,15,2000,'test','testest@gmail.com','0988888888','2023-10-30','早上8點到12點','已繳款'),(12,'8c0be7c6-d7f2-4a84-a9c6-00fede08134b',2,3,2000,'test','testtest@gmail.com','0988888888','2023-11-01','早上8點到12點','已繳款'),(13,'2e74f656-9c46-484b-a0d5-a0d18d4bbbdc',2,3,2000,'test','testtest@gmail.com','0988888888','2023-11-01','早上8點到12點','已繳款'),(14,'9b33f170-3d3d-4d50-884b-6cb6e4d4696c',1,14,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-28','下午1點到5點','已繳款'),(15,'85101ae9-2b59-41ff-a9f2-4a4807532516',1,14,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-28','下午1點到5點','已繳款'),(16,'05296c44-b26f-4f87-8d1b-938aceaed560',1,56,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-03','早上8點到12點','已繳款'),(17,'8a33b278-2107-44b8-a1cd-c4071474db92',1,56,2000,'周紫珍','zizhen0826@gmail.com','0978961486','2023-11-03','早上8點到12點','已繳款'),(18,'2364c86b-5915-424c-83b1-d78d449e7daa',2,25,2500,'周紫珍','zizhen0826@gmail.com','0978961486','2023-10-28','下午1點到5點','已繳款');
 /*!40000 ALTER TABLE `record` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -195,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-07  0:30:18
+-- Dump completed on 2023-12-27 11:08:56

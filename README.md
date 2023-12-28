@@ -1,8 +1,32 @@
-# Wehelp_Stage2
-http://52.198.121.57:3000
+# Taipei Day Trip
+website URL : http://52.198.121.57:3000
 
-# 台北一日遊網站開發專案
-運⽤前後端分離的架構，根據 RESTful API 的設計，整合⾦流服務，完成⼀個旅遊電商網站
+# About this project
+This website is built upon a frontend-backend separated architecture. Moreover, it follows RESTful API design principles and seamlessly integrates financial services.
 
-# 版本管理工具
-利用Git 版本管理⼯具以及 GitHub 雲端版控服務，來管理⼀個持續開發的專案
+### Upon load in this page
+I employ CSS animations to generate dynamic effects for the HTML elements on the index page.
+
+![Alt text](<index_page (1).gif>)
+
+Also, I have implemented lazy loading to optimize the loading of data on the website.
+
+![Alt text](lazyload_1.gif)
+
+Responsive web design (RWD) ensures that this website adapts seamlessly to various screen sizes and monitors.
+
+![Alt text](<rwd (1).gif>)
+
+### Search attraction
+
+Designing the database structure in accordance with the principles of database normalization.
+Additionally, establishing indexes on these tables enhances search efficiency.
+
+![Alt text](image.png)
+
+### Carousel images
+
+![Alt text](carousel_images.gif)
+
+### Order trip
+

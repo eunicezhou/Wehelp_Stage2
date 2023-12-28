@@ -1,7 +1,7 @@
 /* 設定header */
 .content--header{
     width:1200px;
-    margin-top:40px;
+    margin-top:100px;
     margin-left:auto ;
     margin-right:auto ;
     box-sizing: border-box;
@@ -37,6 +37,9 @@
     left:10px;
     margin:auto 0;
 }
+.header__div--leftbar img{
+    cursor: pointer;
+}
 .header__div--rightbar{
     z-index: 2;
     height: 36px;
@@ -45,6 +48,9 @@
     bottom:0;
     right:10px;
     margin:auto 0;
+}
+.header__div--rightbar img{
+    cursor: pointer;
 }
 
 .circles{
@@ -134,9 +140,10 @@ input[type="radio"]{
         border: 2px solid white;
     }
 }
-.purchase{
+#purchase{
     color:black;
     margin:0;
+    cursor: pointer;
 }
 .header__div_form>form{
     height: 200px;
@@ -164,6 +171,7 @@ input[type="radio"]{
     text-align: center;
     color: #fff;
     line-height: 13.3px;
+    cursor: pointer;
 }
 .main{
     border-bottom: #e8e8e8 solid 1px;
@@ -189,7 +197,7 @@ input[type="radio"]{
 }
 @media(max-width:1200px){
     .content--header{
-        margin-top: 0px;
+        margin-top: 80px;
         width:100%;
     }
     .header{
@@ -210,6 +218,7 @@ input[type="radio"]{
 }
 @media(max-width:900px){
     .content--header{
+        margin-top: 55px;
         width:100%;
         padding: 0;
     }

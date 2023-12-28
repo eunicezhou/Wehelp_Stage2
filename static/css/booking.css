@@ -11,7 +11,7 @@
 }
 .header{
     width:1000px;
-    margin: 0 auto;
+    margin: 50px auto 0;
 }
 .header--top_div--welcome{
     margin-top: 10px;
@@ -55,6 +55,7 @@
     display: grid;
     grid-template-rows:repeat(4,24px);
     grid-gap:10px;
+    cursor: pointer;
 }
 .delete{
 
@@ -120,6 +121,7 @@
     line-height: 13.3px;
     color:white;
     font-weight: 400;
+    cursor: pointer;
 }
 @media(max-width:1200px){
     .header{
