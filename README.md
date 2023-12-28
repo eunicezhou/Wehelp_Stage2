@@ -24,9 +24,22 @@ Additionally, establishing indexes on these tables enhances search efficiency.
 
 ![Alt text](image.png)
 
+![Alt text](search.gif)
+
 ### Carousel images
 
 ![Alt text](carousel_images.gif)
 
 ### Order trip
 
+I utilize Tappay as my Third-party financial transactions. As user paying successfully, web page will lead to the order success and history page.
+
+![Alt text](order.gif)
+
+# Project Struct
+
+![Alt text](image-1.png)
+
+### Explanation about the user route
+- The user's request goes through VPC, and enters the EC2 instance, which serves as the virtual server hosting the website. The EC2 instance is responsible for handling user requests and interacting with other services.
+- 

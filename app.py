@@ -1,10 +1,8 @@
 from flask import *
 from functools import wraps
-
 from module_function.env_file import *
 from module_function.database import *
 from module_function.file_type_convert import *
-
 from api.api_orders import orders_blueprint
 from api.api_attractions import attractions_blueprint
 from api.api_user import user_blueprint
@@ -34,5 +32,5 @@ def booking():
 @app.route("/thankyou")
 def thankyou():
 	return render_template("thankyou.html")
-
+    
 app.run(debug=True, host="0.0.0.0", port=3000)
