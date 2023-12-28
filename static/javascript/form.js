@@ -323,30 +323,4 @@ function getValue(){
     }
 }
 //頁面重新loadin的function
-window.addEventListener('load', function() {
-    let token = localStorage.getItem('token');
-    if(token){
-        fetch('/api/user/auth',
-            {method:"GET",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization": `Bearer ${token}`
-            }}).then((response)=>{
-                let data = response.json();
-                return data;
-            }).then((data)=>{
-                username = data.data.name;
-                let sign = document.querySelector("#sign");
-                sign.innerHTML = `
-                    <span id="user">${username}</span>
-                    <span id="signout">登出系統</span>
-                `;
-                let signout = document.querySelector("#signout");
-                signout.addEventListener('click',function signout(){
-                localStorage.removeItem('token');
-                location.reload();
-                })
-                return username;
-            })
-        } 
-    });
+window.addEventListener('load', confirmMember)

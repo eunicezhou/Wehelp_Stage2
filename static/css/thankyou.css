@@ -3,7 +3,7 @@
     width:1200px;
     box-sizing:border-box;
     margin: 0 auto;
-    padding:40px 15px;
+    padding:70px 15px 40px;
     border-bottom: #e8e8e8 solid 1px;
 }
 .thankyou,.historyList{
@@ -30,6 +30,7 @@
 }
 .orderImg{
     width:300px;
+    height: 225px;
     background-color: #448899;
     margin-right: 15px;
     object-fit: cover;
