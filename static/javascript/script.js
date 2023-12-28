@@ -50,6 +50,7 @@ mrt.addEventListener('click',function mrtStation(){
 })
 
 //建立mrtlist移動
+const mrtBar = document.querySelector("#container__div_nav--content");
 const attractions = document.querySelector("#cintainer__div--content");
 const righttbtn = document.querySelector("#container__div--rightbar")
 const lefttbtn = document.querySelector("#container__div--leftbar")
@@ -64,7 +65,7 @@ function moveRight(){
 }
 function moveLeft(){
     let currentPosition = mrtBar.scrollLeft;
-    mrt.scrollTo({
+    mrtBar.scrollTo({
         left:currentPosition - 553,
         behavior:'smooth'
     }) 
