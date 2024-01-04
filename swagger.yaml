@@ -1,0 +1,198 @@
+openapi: 3.0.3
+info:
+  title: Taipei-Day API Structure
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:3000
+paths:
+  /api/attractions:
+    get:
+      tags:
+        - attractions
+      summary: Display attractions on index page
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 4
+                  name:
+                    type: string
+                    example: 新北投溫泉區
+                  category:
+                    type: string
+                    example: 養生溫泉
+                  description:
+                    type: string
+                    example: 鄰近捷運站
+                  transport: 
+                    type: string
+                  mrt:
+                    type: string
+                    example: 新北投
+                  lat:
+                    type: string
+                  lng:
+                    type: string
+                  image: 
+                    type: list
+        '500':
+          description: Cannot get page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  message: 
+                    type: string
+                    example: page格式為數字
+            
+  /api/attractions/attractionID:
+    get:
+      tags:
+        - attractions
+      summary: Specific attraction page
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 4
+                  name:
+                    type: string
+                    example: 新北投溫泉區
+                  category:
+                    type: string
+                    example: 養生溫泉
+                  description:
+                    type: string
+                    example: 鄰近捷運站
+                  transport: 
+                    type: string
+                  mrt:
+                    type: string
+                    example: 新北投
+                  lat:
+                    type: string
+                  lng:
+                    type: string
+                  image: 
+                    type: object
+                    example: [www.travel.taipei_upload_ttnsceneadmin/pic/11000342.jpg]
+        '400':
+          description: Invalid attractionID value
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  message: 
+                    type: string
+                    example: 請輸入正確的id數值
+        '500':
+          description: attractionID is not integer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  message: 
+                    type: string
+                    example: 請輸入一個數值
+  /api/mrts:
+    get:
+      tags:
+        - mrt
+      summary: list mrt stations
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: 
+                    type: object
+                    example: [新北投, 中山]
+  /api/user:
+    post:
+      tags:
+        - user
+      summary: member signup
+      responses:
+        '200':
+          description: successful signup
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  OK:
+                    type: boolean
+                    example: true
+        '400':
+          description: Already signup
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  message: 
+                    type: string
+                    example: 此信箱已註冊
+        '500':
+          description: other error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  message: 
+                    type: string
+                    example: 伺服器回傳錯誤
+  /api/user/auth:
+    put:
+      tags:
+        - user
+      summary: member login
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: 
+                    type: string
+        '400':
+        
+  

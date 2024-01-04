@@ -92,7 +92,7 @@ def get_attraction(attractionID):
 		finalresult = results_convert(results_dict)
 		return finalresult, 400
 	elif attractionID == None:
-		results_dict = {"error": True, "message": "請一個數值"}
+		results_dict = {"error": True, "message": "請輸入一個數值"}
 		finalresult = results_convert(results_dict)
 		return finalresult, 500
 	else:
